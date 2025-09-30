@@ -1,0 +1,2360 @@
+
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Glamnest - Home</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@400;500;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <style>
+      /* General Reset and Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Cormorant Garamond', serif;
+        background-color: #fef9f8;
+        color: #2d2d2d;
+        line-height: 1.6;
+        opacity: 0;
+        animation: fadeInPage 0.8s ease-out forwards;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      a:focus,
+      button:focus,
+      input:focus {
+        outline: 2px dashed #a86f6a;
+        outline-offset: 2px;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #2d2d2d;
+        letter-spacing: 0.05em;
+      }
+
+      p, .section-subtext, .card-text, .custom-btn, .newsletter-section p, .about-text p {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 400;
+        font-size: 1rem;
+        color: #2d2d2d;
+      }
+
+      /* Gradient and Animation Utilities */
+      .gradient-bg {
+        background: linear-gradient(135deg, #d9a7a1, #a86f6a);
+        transition: background 0.4s ease;
+      }
+
+      .gradient-btn {
+        background: linear-gradient(135deg, #d9a7a1, #a86f6a);
+        border: none;
+        border-radius: 40px;
+        color: #fff;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+        padding: 10px 24px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+      }
+
+      .gradient-btn:hover {
+        background: linear-gradient(135deg, #a86f6a, #d9a7a1);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(168, 111, 106, 0.2);
+      }
+
+      /* Hero Section Styling */
+      .hero {
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.4);
+        position: relative;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(217, 167, 161, 0.05), rgba(168, 111, 106, 0.08));
+        z-index: 1;
+        transition: opacity 0.4s ease;
+      }
+
+      .hero .container {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 0 15px;
+        opacity: 0;
+        animation: fadeInContent 1.2s ease-out 0.2s forwards;
+      }
+
+      .hero h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        animation: fadeInDown 1.2s ease-out;
+        margin-bottom: 0.8rem;
+      }
+
+      .hero p {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 300;
+        animation: fadeInUp 1.5s ease-out;
+      }
+
+      /* Carousel */
+      #heroCarousel {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      }
+
+      #heroCarousel.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .carousel-item {
+        transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+      }
+
+      .carousel-item img {
+        object-fit: cover;
+        height: 400px;
+        width: 100%;
+      }
+
+      .carousel-fade .carousel-item {
+        opacity: 0;
+        transform: scale(1.03) translateX(15px);
+        position: absolute;
+        width: 100%;
+      }
+
+      .carousel-fade .carousel-item.active {
+        opacity: 1;
+        transform: scale(1) translateX(0);
+        position: relative;
+      }
+
+      .carousel-control-prev,
+      .carousel-control-next {
+        width: 5%;
+        background: rgba(168, 111, 106, 0.3);
+        transition: background 0.3s ease, transform 0.2s ease;
+        opacity: 0;
+      }
+
+      #heroCarousel.visible .carousel-control-prev,
+      #heroCarousel.visible .carousel-control-next {
+        opacity: 1;
+      }
+
+      .carousel-control-prev:hover,
+      .carousel-control-next:hover {
+        background: rgba(168, 111, 106, 0.5);
+        transform: scale(1.05);
+      }
+
+      /* Search Section */
+      .search-section {
+        background: linear-gradient(135deg, #f6e8e5, #fef9f8);
+        padding: 20px 0;
+        opacity: 0;
+        transform: scale(0.97);
+        animation: searchFadeIn 1s ease-out 0.2s forwards;
+      }
+
+      .search-section .input-group {
+        max-width: 600px;
+        margin: 0 auto;
+        opacity: 0;
+        transform: translateY(15px);
+        animation: inputSlideIn 0.8s ease-out 0.4s forwards;
+      }
+
+      .search-section input {
+        border: 1.5px solid #d9a7a1;
+        border-radius: 40px 0 0 40px;
+        padding: 10px 15px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.95rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      }
+
+      .search-section input:focus {
+        border-color: #a86f6a;
+        box-shadow: 0 0 10px rgba(168, 111, 106, 0.3);
+        transform: scale(1.01);
+      }
+
+      .search-section button {
+        border-radius: 0 40px 40px 0;
+        padding: 10px 15px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.95rem;
+        transition: transform 0.2s ease;
+      }
+
+      .search-section button:hover {
+        transform: scale(1.03);
+      }
+
+      /* Category Box */
+      .category-box {
+        position: relative;
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+
+      .category-box:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 8px 20px rgba(168, 111, 106, 0.2);
+      }
+
+      .glitter-effect {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.1),
+          rgba(217, 167, 161, 0.3),
+          rgba(255, 255, 255, 0.1)
+        );
+        background-size: 200% 200%;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+        animation: glitter 1.5s infinite;
+      }
+
+      .category-box:hover .glitter-effect {
+        opacity: 0.5;
+      }
+
+      @keyframes glitter {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      /* Featured Products */
+      .product-card {
+        border: none;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #ffffff, #fdf2f1);
+      }
+
+      .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 25px rgba(168, 111, 106, 0.25);
+        background: linear-gradient(135deg, #fff6f6, #ffeaea);
+      }
+
+      .product-card img {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+        transition: transform 0.3s ease;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      .product-card:hover img {
+        transform: scale(1.08);
+      }
+
+      .product-card .card-body {
+        padding: 15px;
+      }
+
+      .product-card .card-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2d2d2d;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        min-height: 3.5rem;
+      }
+
+      .product-card .card-text {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.85rem;
+        color: #a86f6a;
+      }
+
+      /* Brand Badge */
+      .brand-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: linear-gradient(135deg, #caea7f, #e97568);
+        color: #171717;
+        padding: 5px 12px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        border-radius: 19px;
+        z-index: 1;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        animation: blinkEffect 1.5s ease-in-out infinite;
+      }
+
+      @keyframes blinkEffect {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+      }
+
+      .product-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 0;
+      }
+
+      .custom-btn {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.75rem;
+        padding: 6px 10px;
+        border-radius: 6px;
+        flex: 1 1 0;
+        text-align: center;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .custom-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .cart-btn {
+        background: linear-gradient(135deg, #d9a7a1, #a86f6a);
+        color: #fff;
+        border: none;
+      }
+
+      .cart-btn:hover {
+        background: linear-gradient(135deg, #a86f6a, #d9a7a1);
+      }
+
+      .wishlist-btn {
+        background: linear-gradient(135deg, #f6e8e5, #d9a7a1);
+        color: #2d2d2d;
+        border: none;
+      }
+
+      .wishlist-btn:hover {
+        background: linear-gradient(135deg, #d9a7a1, #a86f6a);
+        color: #fff;
+      }
+
+      #wishlist-message {
+        margin-top: 8px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.8rem;
+        color: #a86f6a;
+        text-align: center;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+      }
+
+      #wishlist-message.show {
+        opacity: 1;
+      }
+
+      /* Brand Section Styling */
+      .brand-section {
+        padding: 40px 0;
+        background: linear-gradient(135deg, #eccdc7, #f5e3e0);
+        text-align: center;
+      }
+
+      .brand-heading {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 30px;
+        color: #2d2d2d;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        animation: fadeInDown 1s ease-in-out;
+      }
+
+      .brand-logos-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+      }
+
+      .brand-logo-box {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: #fefefe;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .brand-logo-box img {
+        max-width: 80%;
+        max-height: 60%;
+        object-fit: contain;
+        filter: grayscale(30%);
+        transition: filter 0.3s ease;
+      }
+
+      .brand-logo-box:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      }
+
+      .brand-logo-box:hover img {
+        filter: grayscale(0%);
+      }
+
+      /* Responsive Tweaks */
+      @media (max-width: 768px) {
+        .brand-logo-box {
+          width: 100px;
+          height: 100px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .brand-logo-box {
+          width: 80px;
+          height: 80px;
+        }
+      }
+
+      /* Footer */
+      footer {
+        font-family: 'Open Sans', sans-serif;
+        background: linear-gradient(135deg, #a86f6a, #d9a7a1);
+        color: #ffffff;
+        padding: 20px 15px;
+        text-align: center;
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      .intro-section {
+        background-image: linear-gradient(135deg, rgba(179, 113, 113, 0.7), rgba(179, 113, 113, 0.3)), 
+                        url('/static/images/b1.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      /* Intro Section */
+      .intro-section {
+        padding: 20px 0;
+      }
+
+      .intro-section h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d2d2d;
+      }
+
+      .intro-section p {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1rem;
+        color: #2d2d2d;
+      }
+
+      /* Animations */
+      @keyframes fadeInPage {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes fadeInContent {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes searchFadeIn {
+        from { opacity: 0; transform: scale(0.97); }
+        to { opacity: 1; transform: scale(1); }
+      }
+
+      @keyframes inputSlideIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes typing {
+        0% { width: 0; }
+        50% { width: 100%; }
+        100% { width: 0; }
+      }
+
+      @keyframes blink-caret {
+        from, to { border-color: transparent; }
+        50% { border-color: #ffffff; }
+      }
+
+      @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(168, 111, 106, 0.3); }
+        50% { transform: scale(1.03); box-shadow: 0 0 8px 4px rgba(168, 111, 106, 0.2); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(168, 111, 106, 0.3); }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1200px) {
+        .container {
+          max-width: 960px;
+        }
+
+        .hero {
+          height: 350px;
+        }
+
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1rem;
+        }
+
+        .carousel-item img {
+          height: 350px;
+        }
+
+        .product-card img {
+          height: 180px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          max-width: 720px;
+        }
+
+        .hero {
+          height: 300px;
+        }
+
+        .hero h1 {
+          font-size: 2rem;
+        }
+
+        .hero p {
+          font-size: 0.9rem;
+        }
+
+        .carousel-item img {
+          height: 300px;
+        }
+
+        .gradient-btn {
+          font-size: 0.85rem;
+          padding: 8px 20px;
+        }
+
+        .intro-section {
+          margin: 20px;
+        }
+
+        .intro-section h2 {
+          font-size: 2rem;
+        }
+
+        .intro-section p {
+          font-size: 0.9rem;
+        }
+
+        .category-box {
+          padding: 12px;
+        }
+
+        .product-card img {
+          height: 160px;
+        }
+
+        .product-card .card-title {
+          font-size: 1rem;
+        }
+
+        .product-card .card-text {
+          font-size: 0.8rem;
+        }
+
+        .brand-img {
+          max-height: 45px;
+        }
+
+        footer {
+          padding: 15px 10px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .container {
+          max-width: 100%;
+          padding: 0 10px;
+        }
+
+        .hero {
+          height: 250px;
+        }
+
+        .hero h1 {
+          font-size: 1.8rem;
+        }
+
+        .hero p {
+          font-size: 0.85rem;
+        }
+
+        .carousel-item img {
+          height: 250px;
+        }
+
+        .search-section .input-group {
+          max-width: 100%;
+        }
+
+        .search-section input,
+        .search-section button {
+          font-size: 0.8rem;
+          padding: 6px 10px;
+        }
+
+        .intro-section h2 {
+          font-size: 1.8rem;
+        }
+
+        .category-box img {
+          max-height: 100px;
+        }
+
+        .category-box h6 {
+          font-size: 0.9rem;
+        }
+
+        .product-card img {
+          height: 140px;
+        }
+
+        .product-card .card-title {
+          font-size: 0.95rem;
+        }
+
+        .product-card .card-text {
+          font-size: 0.75rem;
+        }
+
+        .product-card .btn-outline-primary,
+        .product-card .btn-outline-danger {
+          font-size: 0.75rem;
+          padding: 6px;
+        }
+
+        .brand-img {
+          max-height: 40px;
+        }
+
+        .brand-box {
+          padding: 10px;
+        }
+
+        footer {
+          padding: 12px 8px;
+          font-size: 0.85rem;
+        }
+      }
+
+      .scroll-container {
+        overflow-x: hidden;
+        white-space: nowrap;
+        position: relative;
+      }
+
+      .scroll-container .row {
+        display: flex;
+        flex-wrap: nowrap;
+        transition: transform 0.5s ease-in-out;
+      }
+
+      .scroll-container .col-12 {
+        flex: 0 0 auto;
+        width: 250px;
+      }
+
+      .card-img-top {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+        border-top-left-radius: calc(0.25rem - 1px);
+        border-top-right-radius: calc(0.25rem - 1px);
+      }
+
+      .product-card {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .category-box {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 0.5s ease-in-out;
+      }
+
+      .category-box:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .image-wrapper {
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+      }
+
+      .image-wrapper img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .image-wrapper::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
+        opacity: 0.5;
+        transition: opacity 0.3s ease;
+      }
+
+      .category-box:hover .image-wrapper::after {
+        opacity: 0.7;
+      }
+
+      .category-box:hover .image-wrapper img {
+        transform: scale(1.1);
+      }
+
+      /* About Section Styling */
+      .about-section {
+        padding: 40px 0;
+        background: linear-gradient(135deg, #f6e8e5, #fef9f8);
+      }
+
+      .about-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+
+      .about-text {
+        flex: 1;
+        min-width: 300px;
+        padding: 20px;
+      }
+
+      .about-text h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d2d2d;
+        margin-bottom: 1rem;
+        animation: fadeInDown 1.2s ease-out;
+      }
+
+      .about-text p {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1rem;
+        color: #2d2d2d;
+        margin-bottom: 1rem;
+        animation: fadeInUp 1.5s ease-out;
+      }
+
+      .about-image {
+        flex: 1;
+        min-width: 300px;
+        padding: 20px;
+      }
+
+      .about-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .about-image img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(168, 111, 106, 0.2);
+      }
+
+      /* Responsive Design for About Section */
+      @media (max-width: 1200px) {
+        .about-text h2 {
+          font-size: 2.2rem;
+        }
+
+        .about-text p {
+          font-size: 0.95rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .about-section {
+          padding: 30px 0;
+        }
+
+        .about-content {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .about-text h2 {
+          font-size: 2rem;
+        }
+
+        .about-text p {
+          font-size: 0.9rem;
+        }
+
+        .about-image img {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .about-section {
+          padding: 20px 0;
+        }
+
+        .about-text h2 {
+          font-size: 1.8rem;
+        }
+
+        .about-text p {
+          font-size: 0.85rem;
+        }
+
+        .about-image {
+          padding: 10px;
+        }
+      }
+
+      /* Newsletter Section */
+      .newsletter-section {
+        background: linear-gradient(135deg, #ffffff, #ffffff);
+        padding: 40px 0;
+        text-align: center;
+        animation: fadeIn 0.8s ease-out;
+      }
+
+      .newsletter-section h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d2d2d;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+      }
+
+      .newsletter-section p {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1rem;
+        color: #2d2d2d;
+        margin-bottom: 1.5rem;
+      }
+
+      .newsletter-section input {
+        border: 1.5px solid #d9a7a1;
+        border-radius: 40px;
+        padding: 10px 15px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.95rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      }
+
+      .newsletter-section input:focus {
+        border-color: #a86f6a;
+        box-shadow: 0 0 10px rgba(168, 111, 106, 0.3);
+        transform: scale(1.01);
+      }
+
+      .newsletter-section button {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.95rem;
+      }
+
+      /* Messages Styling */
+      .messages {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .messages li {
+        padding: 10px 15px;
+        margin: 8px 0;
+        border-radius: 40px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.9rem;
+        text-align: center;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        animation: fadeInContent 0.8s ease-out;
+      }
+
+      .messages .success {
+        background: linear-gradient(135deg, #d9a7a1, #a86f6a);
+        color: #ffffff;
+        box-shadow: 0 3px 10px rgba(168, 111, 106, 0.2);
+      }
+
+      .messages .error {
+        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+        color: #ffffff;
+        box-shadow: 0 3px 10px rgba(255, 107, 107, 0.2);
+      }
+
+      .messages .info {
+        background: linear-gradient(135deg, #f6e8e5, #fef9f8);
+        color: #2d2d2d;
+        border: 1.5px solid #d9a7a1;
+      }
+
+      .newsletter-message {
+        padding: 10px 15px;
+        margin: 8px 0;
+        border-radius: 40px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.9rem;
+        text-align: center;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        animation: fadeInContent 0.8s ease-out;
+      }
+
+      .newsletter-message.success {
+        background: linear-gradient(135deg, #d9a7a1, #a86f6a);
+        color: #ffffff;
+        box-shadow: 0 3px 10px rgba(168, 111, 106, 0.2);
+      }
+
+      .newsletter-message.error {
+        background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+        color: #ffffff;
+        box-shadow: 0 3px 10px rgba(255, 107, 107, 0.2);
+      }
+
+      .newsletter-message.info {
+        background: linear-gradient(135deg, #f6e8e5, #fef9f8);
+        color: #2d2d2d;
+        border: 1.5px solid #d9a7a1;
+      }
+
+      /* Responsive Tweaks */
+      @media (max-width: 768px) {
+        .newsletter-section {
+          padding: 30px 0;
+        }
+
+        .newsletter-section h2 {
+          font-size: 2rem;
+        }
+
+        .newsletter-section p {
+          font-size: 0.9rem;
+        }
+
+        .newsletter-section input {
+          width: 100%;
+          max-width: 280px;
+          font-size: 0.85rem;
+          padding: 8px 12px;
+        }
+
+        .newsletter-section button {
+          font-size: 0.85rem;
+          padding: 8px 20px;
+        }
+
+        .messages li,
+        .newsletter-message {
+          font-size: 0.85rem;
+          padding: 8px 12px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .newsletter-section {
+          padding: 20px 0;
+        }
+
+        .newsletter-section h2 {
+          font-size: 1.8rem;
+        }
+
+        .newsletter-section p {
+          font-size: 0.85rem;
+        }
+
+        .newsletter-section input {
+          width: 100%;
+          max-width: 250px;
+          font-size: 0.8rem;
+          padding: 6px 10px;
+        }
+
+        .newsletter-section button {
+          font-size: 0.8rem;
+          padding: 6px 15px;
+        }
+
+        .messages li,
+        .newsletter-message {
+          font-size: 0.8rem;
+          padding: 6px 10px;
+        }
+      }
+
+      .suggestions-box {
+        position: absolute;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+      }
+
+      /* Hover effect for the card */
+      .card-hover {
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .card-hover:hover {
+        transform: scale(1.05);
+      }
+
+      /* Pulse animation for the button */
+      .btn-pulse {
+        animation: pulse 2s infinite;
+      }
+
+      .square-card {
+        width: 100%;
+        padding-top: 100%;
+        background-size: cover;
+        background-position: center;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        overflow: hidden;
+      }
+
+      .square-card .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 1;
+      }
+
+      .square-card .card-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .fashion-section {
+        font-family: 'Cormorant Garamond', serif;
+        background: linear-gradient(to right, #f8f8f8, #ffffff);
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .text-content {
+        padding: 20px;
+      }
+
+      .section-heading {
+        font-family: 'Playfair Display', serif;
+        font-size: 3rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        line-height: 1.2;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .section-subtext {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 400;
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        max-width: 80%;
+      }
+
+      .btn-buy-now {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        background-color: #ff6200;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      }
+
+      .btn-buy-now:hover {
+        background-color: #e55a00;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 98, 0, 0.4);
+      }
+
+      anciennes {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      .image-placeholder {
+        width: 100%;
+        height: 400px;
+        background: #f0f0f0;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #777;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1rem;
+      }
+
+      .explore-circle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 100px;
+        height: 100px;
+        background: #1a1a1a;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-align: center;
+        text-transform: uppercase;
+        padding: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .section-heading {
+          font-size: 2rem;
+          margin-bottom: 15px;
+        }
+
+        .section-subtext {
+          font-size: 0.95rem;
+          max-width: 100%;
+        }
+
+        .btn-buy-now {
+          padding: 10px 20px;
+          font-size: 0.9rem;
+        }
+
+        .image-placeholder {
+          height: 200px;
+        }
+
+        .explore-circle {
+          width: 80px;
+          height: 80px;
+          font-size: 0.8rem;
+          top: 10px;
+          right: 10px;
+        }
+      }
+
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInBg {
+        0% {
+          opacity: 0;
+          background-size: 120%;
+        }
+        100% {
+          opacity: 1;
+          background-size: 100%;
+        }
+      }
+
+      .animate-fadeInUp {
+        animation: fadeInUp 1s ease-out forwards;
+        opacity: 0;
+      }
+
+      .delay-300 {
+        animation-delay: 0.3s;
+      }
+
+      .delay-500 {
+        animation-delay: 0.5s;
+      }
+
+      .fadeIn-section {
+        animation: fadeInUp 1s ease-out;
+        opacity: 0;
+        animation-fill-mode: forwards;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes btnPulse {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(255, 94, 98, 0.7);
+        }
+        70% {
+          transform: scale(1.05);
+          box-shadow: 0 0 0 10px rgba(255, 94, 98, 0);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0 rgba(255, 94, 98, 0);
+        }
+      }
+
+      .card-hover {
+        background-size: cover;
+        background-position: center;
+        height: 350px;
+        border-radius: 16px;
+        overflow: hidden;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-10px) scale(1.03);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      }
+
+      .overlay {
+        background-color: rgba(0, 0, 0, 0.35);
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: background-color 0.4s;
+      }
+
+      .card-hover:hover .overlay {
+        background-color: rgba(0, 0, 0, 0.25);
+      }
+
+      .card-content {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        z-index: 2;
+      }
+
+      .btn-pulse {
+        animation: btnPulse 2s infinite;
+      }
+
+      @keyframes fadeSlideIn {
+        0% {
+          opacity: 0;
+          transform: translateY(40px) scale(0.95);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes brandPulse {
+        0% {
+          background-color: #ff6f91;
+          transform: scale(1);
+        }
+        50% {
+          background-color: #ff87a2;
+          transform: scale(1.1);
+        }
+        100% {
+          background-color: #ff6f91;
+          transform: scale(1);
+        }
+      }
+
+      .scroll-container .product-card {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.5s ease;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      }
+
+      .scroll-container .product-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+      }
+
+      .brand-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: #ff6f91;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.8rem;
+        font-weight: bold;
+        animation: brandPulse 2s infinite;
+        z-index: 2;
+      }
+
+      .scroll-container h4 {
+        animation: fadeSlideIn 0.8s ease-out;
+      }
+
+      .price-pulse {
+        animation: pulsePrice 1.5s ease-in-out infinite;
+      }
+
+      @keyframes pulsePrice {
+        0% { color: #28a745; transform: scale(1); }
+        50% { color: #218838; transform: scale(1.05); }
+        100% { color: #28a745; transform: scale(1); }
+      }
+
+      .product-card {
+        position: relative;
+        border: 2px solid transparent;
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        background-image: linear-gradient(#fff, #fff), radial-gradient(circle at top left, #ff6f91, #ffc3a0);
+        transition: all 0.4s ease;
+      }
+
+      .product-card:hover {
+        border-color: #ffb6c1;
+      }
+
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(60px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .brand-section {
+        padding: 60px 0;
+      }
+
+      @keyframes slideInLeft {
+        0% {
+          opacity: 0;
+          transform: translateX(-60px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideInRight {
+        0% {
+          opacity: 0;
+          transform: translateX(60px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .about-section {
+        padding: 80px 0;
+      }
+
+      .about-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+
+      .about-text,
+      .about-image {
+        flex: 1 1 48%;
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.6s ease;
+      }
+
+      .about-text.visible {
+        animation: slideInLeft 1s forwards;
+      }
+
+      .about-image.visible {
+        animation: slideInRight 1s forwards;
+      }
+
+      .about-text h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        color: #2d2d2d;
+      }
+
+      .about-image img {
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        height: auto;
+      }
+
+      /* Mobile Stack */
+      @media (max-width: 768px) {
+        .about-content {
+          flex-direction: column;
+        }
+      }
+
+      @keyframes dropDownFade {
+        0% {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .newsletter-section {
+        opacity: 0;
+        transform: translateY(-50px);
+        animation: dropDownFade 1s ease-out forwards;
+        animation-delay: 0.3s;
+      }
+
+      .contact-form-wrapper {
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: max-height 0.7s ease, opacity 0.7s ease;
+      }
+
+      .contact-form-wrapper.active {
+        max-height: 1000px;
+        opacity: 1;
+      }
+
+      .cursor-pointer {
+        cursor: pointer;
+      }
+
+      /* Typing effect */
+      .typing-animation::after {
+        content: '|';
+        animation: blink 0.8s infinite;
+      }
+
+      @keyframes blink {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
+      }
+
+      .contact-section h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2d2d2d;
+      }
+
+      .contact-section p, .contact-section input, .contact-section textarea {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 0.95rem;
+        color: #2d2d2d;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% include 'buyer/user_navebar.html' %}
+
+    <section class="fashion-section fadeIn-section" >
+      <div class="container">
+        <div class="row align-items-center">
+          <!-- Left: Text Content -->
+          <div class="col-md-6 text-content">
+            <h1 class="section-heading">Unlock the Secret of GlamNest</h1>
+            <p class="section-subtext">
+              Discover curated beauty essentials tailored to your unique glow. From everyday glam to elegant evening looks, find products that make every moment effortlessly stunning.
+            </p>
+            <button class="btn btn-buy-now" style="background-color: #e9be66;">Shop Now </button>
+          </div>
+          <!-- Right: Placeholder for Images -->
+          <div class="col-md-6 image-content">
+            <div class="image-placeholder">
+              <img src="{% static 'images/into03.jpg' %}" alt="" style="height: 400px; padding:10px;width:400px;"><br>
+              <img src="{% static 'images/into04.jpg' %}" alt="" style="height: 500px; padding:10px;width:400px;">
+            </div>
+            <div class="explore-circle">
+              <span>Explore Now</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Intro Section -->
+    <section class="gradient-bg text-black py-20 md:py-32 relative intro-section"
+             style="background-image: linear-gradient(135deg, rgba(224, 188, 188, 0.376), rgba(239, 209, 209, 0.327)), url('{% static 'images/intro03.png' %}');
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    animation: fadeInBg 2s ease-in;">
+      <div class="container mx-auto text-center">
+        <h2 class="text-3xl md:text-5xl font-bold mb-4 animate-fadeInUp">
+          <span id="typing-text" class="typing-animation"></span>
+        </h2>
+        <p class="text-lg md:text-xl mb-6 animate-fadeInUp delay-300">Your beauty journey starts with Glamnest</p>
+        <a href="#heroCarousel" class="gradient-btn mt-2 inline-block animate-fadeInUp delay-500">Discover More</a>
+      </div>
+    </section>
+
+    <!-- Search Section -->
+    <div class="search-section py-10 bg-pink-50 text-center">
+      <div class="container">
+        <form method="GET" action="{% url 'User:search_results' %}" id="search-form" autocomplete="off">
+          <div class="relative max-w-xl mx-auto flex">
+            <input
+              type="text"
+              name="q"
+              id="search-input"
+              class="flex-grow px-5 py-3 rounded-l-full border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-brown-400"
+              placeholder="Search for makeup, skincare, and more..."
+              aria-label="Search for products" />
+            <button
+              type="submit"
+              class="px-6 py-3 bg-black text-white font-semibold rounded-r-full hover:bg-gray-800 transition flex items-center gap-2"
+              aria-label="Search">
+              <i class="fas fa-search"></i>
+              <span class="sr-only">Search</span>
+            </button>
+          </div>
+          <!-- Suggestion Box -->
+          <div id="suggestions" class="suggestions-box mt-2 text-left max-w-xl mx-auto hidden"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="container my-5">
+      <h3 class="mx-auto my-12 px-4 py-2 text-3xl text-pink-700 font-semibold tracking-wide text-center"
+          style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; color: #2d2d2d; text-align: center; animation: fadeInDown 1.2s ease-out; text-transform: uppercase; letter-spacing: 2px;">
+        ✨ Shop by Category
+      </h3>
+      <div class="row g-4 justify-content-center">
+        <!-- Category Card 1 -->
+       
+        <!-- Category Card 2 -->
+        <div class="col-12 col-sm-6 col-lg-4">
+          <a href="/skincare" class="text-decoration-none d-block position-relative square-card card-hover"
+             style="background-image: url('{% static 'images/L_skincare.5.jpg' %}');">
+            <div class="overlay"></div>
+            <div class="card-content">
+              <button class="btn btn-primary rounded-pill px-4 btn-pulse" style="background-color: #ff5e62; border: none;">
+                SKINCARE →
+              </button>
+            </div>
+          </a>
+        </div>
+         <div class="col-12 col-sm-6 col-lg-4">
+          <a href="/makeups" class="text-decoration-none d-block position-relative square-card card-hover"
+             style="background-image: url('{% static 'images/into02.png' %}'); opacity: 0;">
+            <div class="overlay"></div>
+            <div class="card-content">
+              <button class="btn btn-primary rounded-pill px-4 btn-pulse" style="background-color: #ff5e62; border: none;">
+                MAKEUP →
+              </button>
+            </div>
+          </a>
+        </div>
+        <!-- Category Card 3 -->
+        <div class="col-12 col-sm-6 col-lg-4">
+          <a href="/haircare" class="text-decoration-none d-block position-relative square-card card-hover"
+             style="background-image: url('{% static 'images/L_haircarehome.jpg' %}');">
+            <div class="overlay"></div>
+            <div class="card-content">
+              <button class="btn btn-primary rounded-pill px-4 btn-pulse" style="background-color: #ff5e62; border: none;">
+                HAIRCARE →
+              </button>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Section with Smooth Carousel -->
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <div class="hero" style="background: url('{% static 'images/home_car.jpg' %}') center/cover no-repeat;">
+            <div class="container text-center text-white d-flex flex-column justify-content-center align-items-center">
+              <h1>Welcome to Glamnest</h1>
+              <p>Discover your favorite beauty products in one place</p>
+              <a href="#products" class="gradient-btn mt-2">Shop Now</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="hero" style="background: url('{% static 'images/home_car2.jpg' %}') center/cover no-repeat;">
+            <div class="container text-center text-white d-flex flex-column justify-content-center align-items-center">
+              <h1>Glow Like Never Before</h1>
+              <p>Top-rated products just for you</p>
+              <a href="#products" class="gradient-btn mt-2">Explore Now</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="hero" style="background: url('{% static 'images/home_car3.jpg' %}') center/cover no-repeat;">
+            <div class="container text-center text-white d-flex flex-column justify-content-center align-items-center">
+              <h1>Feel Confident, Feel Beautiful</h1>
+              <p>Premium skincare and makeup essentials</p>
+              <a href="#products" class="gradient-btn mt-2">Start Shopping</a>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <div class="hero" style="background: url('{% static 'images/home_car4.jpg' %}') center/cover no-repeat;">
+            <div class="container text-center text-white d-flex flex-column justify-content-center align-items-center">
+              <h1>Feel Confident, Feel Beautiful</h1>
+              <p>Premium skincare and makeup essentials</p>
+              <a href="#products" class="gradient-btn mt-2">Start Shopping</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev" aria-label="Previous slide">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next" aria-label="Next slide">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+
+    <!-- Featured Products -->
+    <div class="container my-4" id="products">
+      <h3 class="mx-auto my-12 px-4 py-2 text-3xl text-pink-700 font-semibold tracking-wide text-center"
+          style="font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; color: #2d2d2d; text-align: center; animation: fadeInDown 1.2s ease-out; text-transform: uppercase; letter-spacing: 2px;">
+        ✨ Shop by Featured Products
+      </h3>
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          {% for i in featured_products %}
+          <div class="swiper-slide">
+            <div class="card h-100 product-card position-relative">
+              <span class="brand-badge">{{ i.seller.brand }}</span>
+              <a href="{% url 'User:product_detail' i.id %}" class="text-decoration-none text-dark">
+                {% if i.image %}
+                  <img src="{{ i.image.url }}" class="card-img-top" alt="{{ i.product_name }}">
+                {% else %}
+                  <img src="{% static 'images/default_image.jpg' %}" class="card-img-top" alt="Default image">
+                {% endif %}
+                <div class="card-body">
+                  <h5 class="card-title product-title">{{ i.product_name }}</h5>
+                  <p class="card-text text-success fw-bold price-pulse">₹{{ i.price }}</p>
+                </div>
+              </a>
+              <div class="product-actions d-flex justify-content-between align-items-center px-3 pb-3">
+                <form method="POST" action="{% url 'add_to_cart' i.id %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn custom-btn cart-btn d-flex align-items-center">
+                    <i class="bi bi-bag-fill me-2"></i> Add
+                  </button>
+                </form>
+                <button class="btn custom-btn wishlist-btn" onclick="addToWishlist({{ i.id }})">
+                  <i class="bi bi-heart me-1"></i> Wishlist
+                </button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Shop by Brand Section -->
+    <section class="brand-section">
+      <div class="container">
+        <h4 class="brand-heading">Shop by Brand</h4>
+        <div class="brand-logos-grid">
+          <a href="/loreal" class="brand-logo-box">
+            <img src="{% static 'images/loreal_logo.jpg' %}" alt="L'Oréal Paris">
+          </a>
+          <a href="/maybelline" class="brand-logo-box">
+            <img src="{% static 'images/maybelline_logo.jpg' %}" alt="Maybelline">
+          </a>
+          <a href="/nykaa" class="brand-logo-box">
+            <img src="{% static 'images/nykaa_logo.jpg' %}" alt="Nykaa">
+          </a>
+          <a href="/lakme" class="brand-logo-box">
+            <img src="{% static 'images/lakmae_logo.jpg' %}" alt="Lakmé">
+          </a>
+          <a href="/swissbeauty" class="brand-logo-box">
+            <img src="{% static 'images/swissbeauty_logo.jpg' %}" alt="Swiss Beauty">
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="about-section">
+      <div class="container about-content">
+        <!-- Left: Text Content -->
+        <div class="about-text">
+          <h2 class="text-3xl md:text-4xl font-bold mb-3">About GlamNest</h2>
+          <p class="text-base md:text-lg mb-4">
+            Welcome to <span class="font-semibold text-pink-600">GlamNest</span>, your one-stop destination for beauty and elegance. We are passionate about helping you discover your unique glow with our curated selection of premium skincare, makeup, and haircare products.
+          </p>
+          <p class="text-base md:text-lg mb-4">
+            Founded with a vision to redefine beauty, GlamNest brings you high-quality products from trusted brands, tailored to elevate your daily routine. Our mission is to empower you to feel confident and beautiful in your own skin.
+          </p>
+          <p class="text-base md:text-lg">
+            Join us on a journey to unleash your inner radiance. Explore our collections and make every moment a celebration of you.
+          </p>
+          <a href="#products" class="gradient-btn mt-2 inline-block">Shop Now</a>
+        </div>
+        <!-- Right: Image -->
+        <div class="about-image">
+          <img src="{% static 'images/home_about.jpg' %}" alt="GlamNest About Us" class="img-fluid">
+        </div>
+      </div>
+    </section>
+
+    <!-- Newsletter Subscription Section -->
+    <section class="newsletter-section" style="background: linear-gradient(135deg, #eccdc7, #f5e3e0); padding: 40px 0; text-align: center;">
+      <div class="container">
+        <h2 class="text-3xl md:text-4xl font-bold mb-3">Stay in the Glam Loop ✨</h2>
+        <p class="text-base md:text-lg mb-4">Subscribe to our newsletter and be the first to know about new arrivals, discounts, and more!</p>
+        <form action="{% url 'subscribe_newsletter' %}" method="POST" class="flex justify-center gap-3 flex-wrap">
+          {% csrf_token %}
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+            class="px-5 py-3 border border-[#d9a7a1] rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-[#a86f6a] focus:border-[#a86f6a] transition-all duration-300"
+            style="width: 300px; font-family: 'Open Sans', sans-serif; font-size: 0.95rem;"
+          >
+          <button
+            type="submit"
+            class="gradient-btn flex items-center gap-2"
+          >
+            Subscribe <i class="fas fa-envelope"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section class="contact-section" style="background: linear-gradient(135deg, #f6e8e5, #fef9f8); padding: 40px 0; text-align: center;">
+      <div class="container max-w-lg mx-auto px-4">
+        <h2 id="toggleContactForm" class="text-3xl md:text-4xl font-bold mb-3 cursor-pointer">
+          Get in Touch ✨
+        </h2>
+        <div id="contactContent" class="contact-form-wrapper">
+          <p class="text-base md:text-lg mb-6">
+            We'd love to hear from you! Drop us a message below.
+          </p>
+          <form id="contactForm" action="{% url 'User:contact_submit' %}" method="post" class="space-y-4 flex flex-col items-center">
+            {% csrf_token %}
+            <div class="w-full">
+              <input type="text" id="name" name="name" placeholder="Your Name" required
+                     class="px-5 py-3 border border-[#d9a7a1] rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-[#a86f6a] focus:border-[#a86f6a] transition-all duration-300 w-full"
+                     style="font-family: 'Open Sans', sans-serif; font-size: 0.95rem;">
+            </div>
+            <div class="w-full">
+              <input type="email" id="email" name="email" placeholder="Your Email" required
+                     class="px-5 py-3 border border-[#d9a7a1] rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-[#a86f6a] focus:border-[#a86f6a] transition-all duration-300 w-full"
+                     style="font-family: 'Open Sans', sans-serif; font-size: 0.95rem;">
+            </div>
+            <div class="w-full">
+              <textarea id="message" name="message" placeholder="Your Message" rows="5" required
+                        class="px-5 py-3 border border-[#d9a7a1] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#a86f6a] focus:border-[#a86f6a] transition-all duration-300 w-full"
+                        style="font-family: 'Open Sans', sans-serif; font-size: 0.95rem;"></textarea>
+            </div>
+            <button type="submit"
+                    style="background: linear-gradient(135deg, #d9a7a1, #a86f6a); color: white; padding: 0.75rem 1.5rem; border-radius: 9999px; font-family: 'Open Sans', sans-serif; font-size: 0.95rem; transition: all 0.3s ease;"
+                    class="flex items-center gap-2 hover:bg-gradient-to-r hover:from-[#a86f6a] hover:to-[#d9a7a1] hover:transform hover:-translate-y-0.5">
+              Send Message <i class="fas fa-envelope"></i>
+            </button>
+          </form>
+          <p id="formMessage" class="mt-3 text-center text-[#a86f6a] hidden"
+             style="font-family: 'Open Sans', sans-serif; font-size: 0.9rem;">
+            <!-- Dynamic form message here -->
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- Footer -->
+    {% include 'footer_sec.html' %}
+
+    <script>
+     
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+
+      const taglines = [
+        "Unleash Your Inner Glow",
+        "Beauty That Defines You",
+        "Radiance in Every Step"
+      ];
+      let taglineIndex = 0;
+      let charIndex = 0;
+      const typingText = document.getElementById('typing-text');
+
+      function type() {
+        if (charIndex < taglines[taglineIndex].length) {
+          typingText.textContent += taglines[taglineIndex].charAt(charIndex);
+          charIndex++;
+          setTimeout(type, 80); /* Faster typing */
+        } else {
+          setTimeout(erase, 1500); /* Shorter pause */
+        }
+      }
+
+      function erase() {
+        if (charIndex > 0) {
+          typingText.textContent = taglines[taglineIndex].substring(0, charIndex - 1);
+          charIndex--;
+          setTimeout(erase, 40); /* Faster erasing */
+        } else {
+          taglineIndex = (taglineIndex + 1) % taglines.length;
+          setTimeout(type, 300); /* Shorter delay */
+        }
+      }
+
+      // Scroll-based animation for Hero Carousel
+      function handleScroll() {
+        const carousel = document.getElementById('heroCarousel');
+        const carouselPosition = carousel.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+
+        if (carouselPosition < windowHeight * 0.8) {
+          carousel.classList.add('visible');
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(type, 300); /* Faster start */
+        window.addEventListener('scroll', handleScroll);
+        handleScroll();
+      });
+
+      document.addEventListener('DOMContentLoaded', () => {
+  const scrollContainer = document.querySelector('.scroll-container');
+  const row = scrollContainer.querySelector('.row');
+  const cards = row.querySelectorAll('.col-12');
+  if (cards.length === 0) return; // Exit if no products
+
+  // Calculate total width of all cards
+  const totalWidth = Array.from(cards).reduce((sum, card) => sum + card.offsetWidth, 0);
+  const containerWidth = scrollContainer.offsetWidth;
+
+  // Start from the rightmost position
+  scrollContainer.scrollLeft = totalWidth;
+
+  // Auto-scroll function
+  let scrollPosition = totalWidth;
+  const scrollSpeed = 1; // Pixels per frame, adjust for speed
+  const scrollInterval = 16; // ~60fps
+
+  function autoScroll() {
+    scrollPosition -= scrollSpeed;
+    if (scrollPosition <= 0) {
+      scrollPosition = totalWidth; // Loop back to the right
+    }
+    scrollContainer.scrollLeft = scrollPosition;
+    requestAnimationFrame(autoScroll);
+  }
+
+  // Start auto-scrolling
+  requestAnimationFrame(autoScroll);
+
+  // Pause on hover
+  scrollContainer.addEventListener('mouseenter', () => {
+    cancelAnimationFrame(autoScroll);
+  });
+
+  // Resume on mouse leave
+  scrollContainer.addEventListener('mouseleave', () => {
+    requestAnimationFrame(autoScroll);
+  });
+});
+//product browsing
+  document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('search-input');
+    const suggestionsBox = document.getElementById("suggestionsBox");
+
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value.trim();
+
+      if (query.length < 2) {
+        suggestionsBox.innerHTML = '';  // Clear suggestions if query too short
+        suggestionsBox.style.display = 'none';
+        return;
+      }
+
+      fetch(`/search-suggestions/?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.suggestions.length > 0) {
+            suggestionsBox.style.display = 'block';
+            suggestionsBox.innerHTML = data.suggestions
+              .map(item => `<div class="suggestion-item" onclick="selectSuggestion('${item}')">${item}</div>`)
+              .join('');
+          } else {
+            suggestionsBox.style.display = 'none';
+            suggestionsBox.innerHTML = '';
+          }
+        })
+        .catch(err => {
+          console.error('Error fetching suggestions:', err);
+          suggestionsBox.style.display = 'none';
+        });
+    });
+  });
+
+  // When user clicks a suggestion, fill input and hide suggestions
+  function selectSuggestion(value) {
+    const searchInput = document.getElementById('search-input');
+    const suggestionsBox = document.getElementById('suggestions');
+    searchInput.value = value;
+    suggestionsBox.innerHTML = '';
+    suggestionsBox.style.display = 'none';
+  }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const aboutSection = document.querySelector('.about-section');
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    },
+    { threshold: 0.2 }
+  );
+  observer.observe(aboutSection);
+});
+
+
+
+function getCSRFToken() {
+  return document.cookie.split('; ')
+    .find(row => row.startsWith('csrftoken'))
+    ?.split('=')[1];
+}
+
+function showToast(message, type = 'success') {
+  const toastEl = document.getElementById('actionToast');
+  const toastBody = document.getElementById('toast-message');
+
+  toastBody.textContent = message;
+  toastEl.className = `toast align-items-center text-white bg-${type} border-0`;
+
+  const toast = new bootstrap.Toast(toastEl);
+  toast.show();
+}
+
+
+function addToWishlist(productId) {
+  fetch(`/add-to-wishlist/${productId}/`, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCSRFToken(),
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(res => {
+    if (res.status === 302 || res.status === 401) {
+      // Treat as unauthenticated and trigger redirect after showing toast
+      showToast('Please login to add to wishlist', 'danger');
+      setTimeout(() => {
+    window.location.href = "{% url 'User:user_login' %}?next=" + encodeURIComponent(window.location.pathname || '/');
+      }, 1500);  // 1.5 second delay
+      throw new Error('Not authenticated');
+    }
+    return res.json();
+  })
+  .then(data => {
+    showToast(data.message);
+    updateWishlistCount();
+  })
+  .catch(err => {
+    if (err.message !== 'Not authenticated') {
+      showToast('Failed to add to wishlist please login', 'danger');
+      setTimeout(() => {
+        window.location.href = '/user_login/?next=' + window.location.pathname;
+      }, 1500);
+    }
+  });
+}
+
+
+function updateWishlistCount() {
+  fetch('/get-wishlist-count/')
+    .then(res => res.json())
+    .then(data => {
+      const badge = document.getElementById('wishlist-badge');
+      if (badge) badge.textContent = data.count;
+    });
+}
+
+  // Hide suggestions when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!suggestionsBox.contains(e.target) && e.target !== searchInput) {
+      suggestionsBox.classList.add('hidden');
+    }
+  });
+
+  //contact
+  document.getElementById("contactForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const message = document.getElementById("message").value;
+
+    fetch("{% url 'User:contact_submit' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": csrfToken
+        },
+        body: new URLSearchParams({ name, email, message })
+    })
+    .then(response => {
+        if (response.ok) {
+            const formMessage = document.getElementById("formMessage");
+            formMessage.classList.remove("hidden");
+            formMessage.innerText = "Message sent successfully!";
+            this.reset(); // Clear the form fields
+            
+            // Hide the message after 3 seconds
+            setTimeout(() => {
+                formMessage.classList.add("hidden");
+                formMessage.innerText = "";
+            }, 3000);
+        }
+        // Do nothing on failure
+    })
+    .catch(() => {
+        // Ignore errors silently
+    });
+});
+
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+  <div id="actionToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toast-message">
+        Action completed.
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div id="actionToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toast-message">Success</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".square-card");
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = "fadeInUp 1s ease forwards";
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    cards.forEach(card => {
+      card.style.opacity = 0;
+      observer.observe(card);
+    });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const productCards = document.querySelectorAll(".product-card");
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = "fadeSlideIn 0.8s forwards ease-out";
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    productCards.forEach(card => observer.observe(card));
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const brandLogos = document.querySelectorAll(".brand-logo-box");
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = `slideInRight 0.6s ease forwards`;
+          entry.target.style.animationDelay = `${index * 0.15}s`;
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    brandLogos.forEach(logo => observer.observe(logo));
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const aboutText = document.querySelector(".about-text");
+    const aboutImage = document.querySelector(".about-image");
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (entry.target.classList.contains("about-text")) {
+            entry.target.classList.add("visible");
+          }
+          if (entry.target.classList.contains("about-image")) {
+            entry.target.classList.add("visible");
+          }
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    observer.observe(aboutText);
+    observer.observe(aboutImage);
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const newsletter = document.querySelector(".newsletter-section");
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          newsletter.style.animation = "dropDownFade 1s ease-out forwards";
+          observer.unobserve(newsletter);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    observer.observe(newsletter);
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.getElementById("toggleContactForm");
+    const contactContent = document.getElementById("contactContent");
+
+    toggleBtn.addEventListener("click", () => {
+      contactContent.classList.toggle("active");
+
+      if (contactContent.classList.contains("active")) {
+        contactContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+<script>
+  const swiper = new Swiper(".mySwiper", {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    breakpoints: {
+      640: { slidesPerView: 1 },
+      768: { slidesPerView: 2 },
+      1024: { slidesPerView: 3 },
+    },
+  });
+</script>
+
+  </body>
+</html>

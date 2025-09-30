@@ -1,0 +1,362 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Product Approval</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@400;600&family=Orbitron:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-color: #1c2526;
+            --card-bg: #2a3439;
+            --accent-color: #00d1b2;
+            --text-primary: #47545b;
+            --text-secondary: #a0b0b8;
+            --hover-bg: rgba(129, 158, 184, 0.593);
+            --border-color: rgba(0, 209, 178, 0.2);
+            --shadow-color: rgba(0, 209, 178, 0.25);
+            --btn-success-bg: #28a745;
+            --btn-danger-bg: #dc3545;
+            --font-primary: 'Roboto', sans-serif;
+            --font-secondary: 'Poppins', sans-serif;
+            --font-accent: 'Orbitron', sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .main-content {
+            margin-left: 80px;
+            padding: 2rem;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar.expanded ~ .main-content {
+            margin-left: 260px;
+        }
+
+        @media (max-width: 991px) {
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            .sidebar.expanded ~ .main-content {
+                margin-left: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .heading-section {
+            text-align: center;
+            margin: 2.5rem 0;
+            position: relative;
+        }
+
+        .heading-section h2 {
+            font-family: var(--font-accent);
+            font-size: 2.4rem;
+            font-weight: 600;
+            color: rgb(22, 58, 96);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px var(--shadow-color);
+        }
+
+        .heading-section h2::after {
+            content: "";
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--accent-color);
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 6px 18px var(--shadow-color);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+            position: relative;
+            max-width: 100%;
+            height: auto;
+            align-items: stretch;
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px var(--shadow-color);
+            background: rgba(154, 193, 230, 0.1);
+        }
+
+        .product-card img {
+            width: 220px;
+            height: 220px;
+            object-fit: cover;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .no-image {
+            width: 220px;
+            height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            font-family: var(--font-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            border-right: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-content h5 {
+            font-family: var(--font-accent);
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin: 0 0 0.75rem;
+            line-height: 1.2;
+        }
+
+        .card-content p {
+            font-family: var(--font-secondary);
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin: 0.3rem 0;
+            line-height: 1.4;
+        }
+
+        .card-content .text-secondary {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .brand-badge {
+            background: var(--text-secondary);
+            color: var(--text-primary);
+            padding: 0.4rem 0.8rem;
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-family: var(--font-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            border-bottom-left-radius: 8px;
+            max-width: 40%;
+            text-align: center;
+        }
+
+        .product-card:hover .brand-badge {
+            background: var(--text-primary);
+            color: var(--text-secondary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .btn-approve, .btn-reject {
+            font-family: var(--font-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-approve {
+            background: var(--btn-success-bg);
+        }
+
+        .btn-approve:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-reject {
+            background: var(--btn-danger-bg);
+        }
+
+        .btn-reject:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+
+        .row-cols-md-2 .col {
+            margin-bottom: 1.5rem;
+        }
+
+        .alert {
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: var(--font-secondary);
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        @media (max-width: 767px) {
+            .heading-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .product-card {
+                flex-direction: column;
+            }
+
+            .product-card img,
+            .no-image {
+                width: 100%;
+                height: 180px;
+                border-top-right-radius: 12px;
+                border-bottom-left-radius: 0;
+            }
+
+            .card-content h5 {
+                font-size: 1.3rem;
+            }
+
+            .card-content p {
+                font-size: 0.9rem;
+            }
+
+            .brand-badge {
+                font-size: 0.8rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .btn-approve,
+            .btn-reject {
+                font-size: 0.85rem;
+                padding: 0.4rem 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-content {
+                padding: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn-approve,
+            .btn-reject {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'admin/admin_navebar.html' %}
+
+    <div class="main-content">
+        <div class="container">
+            <div class="heading-section">
+                <h2>Unapproved Products</h2>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                {% for i in products %}
+                <div class="col">
+                    <div class="product-card">
+                        <!-- Product Image or Placeholder -->
+                        {% if i.image %}
+                            <img src="{{ i.image.url }}" alt="{{ i.product_name|default:'Product' }} Image">
+                        {% else %}
+                            <div class="no-image">No Image Available</div>
+                        {% endif %}
+
+                        <!-- Card Content -->
+                        <div class="card-content">
+                            <div>
+                                <span class="brand-badge">{{ i.brand_name|default:"N/A" }}</span>
+                                <h5>{{ i.product_name|default:"Unknown" }}</h5>
+                                <p><strong>Quantity:</strong> {{ i.quantity|default:"N/A" }}</p>
+                                <p><strong>Price:</strong> ₹{{ i.price|default:"N/A" }}</p>
+                                {% if i.expiry_date %}
+                                <p><strong>Expiry:</strong> {{ i.expiry_date|date:"Y-m-d" }}</p>
+                                {% endif %}
+                                <p class="text-secondary"><small>ID: {{ i.id|default:"N/A" }}</small></p>
+                            </div>
+                            <div class="action-buttons">
+                                <a href="{% url 'User:approve_product' i.id %}" class="btn btn-approve">✅ Approve</a>
+                                <a href="{% url 'User:reject_product' i.id %}" class="btn btn-reject">❌ Reject</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert">
+                        No unapproved products found.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const sidebar = document.getElementById('adminSidebar');
+        const mainContent = document.querySelector('.main-content');
+        const observer = new MutationObserver(() => {
+            if (sidebar && sidebar.classList.contains('expanded')) {
+                mainContent.style.marginLeft = '260px';
+            } else {
+                mainContent.style.marginLeft = '80px';
+            }
+        });
+
+        if (sidebar) {
+            observer.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
+        }
+    </script>
+</body>
+</html>

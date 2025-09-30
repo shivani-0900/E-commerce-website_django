@@ -1,0 +1,726 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="{% if product %}{{ product.product_name }} - {{ product.description|truncatewords:30 }}{% else %}Product Page{% endif %}" />
+  <meta name="keywords" content="{% if product %}{{ product.product_name }}, {{ product.category }}, {{ product.product_type }}{% else %}e-commerce, product{% endif %}" />
+  <title>{% if product %}{{ product.product_name }}{% else %}Product{% endif %}</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <!-- Google Fonts: Playfair Display, Cormorant Garamond, Open Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@400;500;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <meta name="csrf-token" content="{{ csrf_token }}">
+
+  <style>
+    /* General Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: #fef9f8; /* Softer background for elegance */
+      color: #2d2d2d;
+    }
+    /* Banner Section */
+    .banner-section {
+      background: linear-gradient(135deg, #f6e8e5, #fef9f8); /* Theme-aligned gradient */
+      padding: 1.5rem 1rem;
+      text-align: center;
+      border-radius: 10px;
+      margin: 10px 0 2rem; /* Adjusted for fixed navbar */
+      position: relative;
+      overflow: hidden;
+    }
+    .banner-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: url('https://www.transparenttextures.com/patterns/confetti.png') repeat;
+      opacity: 0.1;
+    }
+    .banner-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #a86f6a; /* Theme color */
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.5px;
+    }
+    .banner-section p {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+    .countdown-timer {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #a86f6a;
+      margin-bottom: 1rem;
+    }
+    .banner-btn {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(45deg, #d9a7a1, #a86f6a); /* Theme gradient */
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 3px 8px rgba(168, 111, 106, 0.1);
+    }
+    .banner-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(168, 111, 106, 0.15);
+      background: linear-gradient(45deg, #a86f6a, #d9a7a1);
+    }
+
+    /* Product Layout */
+    .product-container {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    /* Main Product Image */
+    #main-image {
+      max-width: 100%;
+      max-height: 500px;
+      width: 100%;
+      object-fit: contain;
+      border: 1px solid #f6e8e5; /* Theme border */
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(168, 111, 106, 0.1);
+      transition: transform 0.4s ease;
+      cursor: zoom-in;
+    }
+    #main-image:hover {
+      transform: scale(1.03);
+    }
+
+    /* Thumbnail Container */
+    #thumbnail-container {
+      max-height: 500px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      max-width: 80px;
+    }
+    .thumbnail-img {
+      border: 2px solid transparent;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      transition: border-color 0.3s ease;
+    }
+    .thumbnail-img.active,
+    .thumbnail-img:hover {
+      border-color: #a86f6a;
+    }
+
+    /* Product Info */
+    .product-info {
+      flex: 1;
+      max-width: 600px;
+    }
+    .product-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      color: #2d2d2d;
+    }
+    .text-muted {
+      font-family: 'Open Sans', sans-serif;
+      color: #555 !important;
+      font-size: 0.9rem;
+    }
+    .price-current {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: #2d2d2d;
+    }
+    .discount {
+      font-family: 'Open Sans', sans-serif;
+      color: #a86f6a;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+    }
+    .wishlist-addbag-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .btn-addbag, .btn-wishlist {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(45deg, #d9a7a1, #a86f6a); /* Theme gradient */
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 3px 8px rgba(168, 111, 106, 0.1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-addbag:hover, .btn-wishlist:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(168, 111, 106, 0.15);
+      background: linear-gradient(45deg, #a86f6a, #d9a7a1);
+    }
+    .btn-wishlist {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #wishlist-message {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Shade Selector */
+    .shade-selector {
+      margin-top: 1.5rem;
+    }
+    .shade-selector p {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      color: #2d2d2d;
+      margin-bottom: 0.5rem;
+    }
+    .shade-box {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 5px rgba(168, 111, 106, 0.1);
+      transition: border-color 0.3s ease, transform 0.3s ease;
+    }
+    .shade-box.selected {
+      border-color: #a86f6a;
+      transform: scale(1.1);
+    }
+    .shade-box:hover {
+      border-color: #d9a7a1;
+      transform: scale(1.1);
+    }
+
+    /* Details Section */
+    .details-section {
+      margin-top: 3rem;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(168, 111, 106, 0.05);
+      border-left: 4px solid #a86f6a; /* Theme color */
+    }
+    .details-section h5 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #2d2d2d;
+      margin-bottom: 1rem;
+      position: relative;
+      padding-left: 15px;
+    }
+    .details-section h5::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      height: 24px;
+      width: 4px;
+      background: #a86f6a;
+    }
+    .details-section h6 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2d2d2d;
+      margin-bottom: 0.5rem;
+    }
+    .details-section p {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .read-more-content {
+      max-height: 200px;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .read-more-content.open {
+      max-height: 2000px;
+    }
+    .read-more-btn {
+      font-family: 'Open Sans', sans-serif;
+      background: none;
+      border: none;
+      color: #a86f6a;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      padding: 0;
+    }
+    .read-more-btn:hover {
+      color: #d9a7a1;
+    }
+
+    /* Footer Info */
+    .footer-info {
+      margin-top: 2rem;
+    }
+    .footer-info p {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+    .footer-info i {
+      color: #a86f6a;
+      margin-right: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+      .banner-section {
+        margin-top: 80px; /* Adjusted for smaller navbar */
+      }
+      .product-container {
+        flex-direction: column;
+      }
+      #thumbnail-container {
+        flex-direction: row;
+        max-height: none;
+        max-width: 100%;
+        overflow-x: auto;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        justify-content: center;
+      }
+      .thumbnail-img {
+        width: 60px;
+        height: 60px;
+      }
+      #main-image {
+        max-height: 400px;
+      }
+      .product-title {
+        font-size: 1.4rem;
+      }
+      .price-current {
+        font-size: 1.5rem;
+      }
+      .discount {
+        font-size: 0.9rem;
+      }
+      .banner-section h2 {
+        font-size: 1.6rem;
+      }
+      .countdown-timer {
+        font-size: 1rem;
+      }
+    }
+    @media (max-width: 576px) {
+      .banner-section {
+        margin-top: 70px;
+        padding: 1rem;
+      }
+      .banner-section h2 {
+        font-size: 1.4rem;
+      }
+      .banner-section p, .banner-btn {
+        font-size: 0.85rem;
+      }
+      .countdown-timer {
+        font-size: 0.9rem;
+      }
+      .product-title {
+        font-size: 1.2rem;
+      }
+      .price-current {
+        font-size: 1.3rem;
+      }
+      .discount, .text-muted, .shade-selector p, .btn-addbag, .read-more-btn {
+        font-size: 0.85rem;
+      }
+      .details-section h5 {
+        font-size: 1.1rem;
+      }
+      .details-section h6, .details-section p {
+        font-size: 0.85rem;
+      }
+      .footer-info p {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Fixed Navbar -->
+    {% include 'buyer/user_navebar.html' %}
+
+
+  <!-- Banner Section -->
+  <section class="banner-section">
+    <h2>Big Summer Sale!</h2>
+    <p>Up to 50% off on selected products</p>
+    <div class="countdown-timer" id="countdown">
+      <span id="days">00</span>d :
+      <span id="hours">00</span>h :
+      <span id="minutes">00</span>m :
+      <span id="seconds">00</span>s
+    </div>
+    <button class="banner-btn" aria-label="Shop Now Button">Shop Now</button>
+  </section>
+
+  <!-- Product Detail Section -->
+  <section class="container product-section">
+    {% if product %}
+    <div class="product-container">
+      <!-- Thumbnails on left (or top on small screens) -->
+      <div id="thumbnail-container" aria-label="Product image thumbnails" role="list">
+        <img src="{{ product.image.url|default:'/static/images/fallback.jpg' }}" id="thumb-0" class="thumbnail-img active" alt="Main product image thumbnail" role="listitem" tabindex="0" aria-selected="true" loading="lazy" onclick="changeMainImage(this, this.src)" onkeydown="if(event.key==='Enter') changeMainImage(this, this.src)" />
+        {% for img in images %}
+        <img src="{{ img.image.url|default:'/static/images/fallback.jpg' }}" id="thumb-{{ forloop.counter }}" class="thumbnail-img" alt="Product image thumbnail {{ forloop.counter }}" role="listitem" tabindex="0" aria-selected="false" loading="lazy" onclick="changeMainImage(this, this.src)" onkeydown="if(event.key==='Enter') changeMainImage(this, this.src)" />
+        {% endfor %}
+      </div>
+
+      <!-- Main Image -->
+      <div style="flex: 1; min-width: 300px;">
+        <img id="main-image" src="{{ product.image.url|default:'/static/images/fallback.jpg' }}" alt="{{ product.product_name }}" loading="lazy" />
+      </div>
+
+      <!-- Product Info -->
+      <div class="col-md-5 product-info">
+        <h1 class="product-title">{{ product.product_name|default:"Product Name" }}
+          {% if product.get_quantity_display %}({{ product.get_quantity_display }}){% endif %}</h1>
+        <p class="text-muted">Brand: {{ product.brand_name|default:"Unknown" }}</p>
+        <p class="text-muted">Category: {{ product.category|default:"N/A" }}</p>
+        <p class="text-muted">Type: {{ product.product_type|default:"N/A" }}</p>
+
+        <div class="mb-2">
+          <span class="price-current">₹{{ product.price|floatformat:2|default:"0.00" }}</span>
+          {% if product.discount %}
+            <span class="discount">{{ product.discount }}% OFF</span>
+          {% endif %}
+          <br>
+          <small class="text-muted">Inclusive of all taxes</small>
+        </div>
+
+        {% if product.product_type == 'Makeup' and product.category == 'Mascara' %}
+          <div class="shade-selector mb-3">
+            <p>Shade: <span id="selected-shade">Very Black</span></p>
+            <div>
+              <div class="shade-box selected" style="background-color: #000000;" data-shade="Very Black"
+                   role="button" tabindex="0" aria-label="Select Very Black shade"></div>
+              <div class="shade-box" style="background-color: #1c2526;" data-shade="Deep Black"
+                   role="button" tabindex="0" aria-label="Select Deep Black shade"></div>
+              <div class="shade-box" style="background-color: #2e1e3b;" data-shade="Midnight Purple"
+                   role="button" tabindex="0" aria-label="Select Midnight Purple shade"></div>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="wishlist-addbag-group">
+          <!-- Message will appear here -->
+          <div id="wishlist-message" style="display:none; color: #2e7d32; margin-bottom: 10px;"></div>
+
+          <!-- Add to Cart Form -->
+          <form action="{% url 'add_to_cart' product.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-addbag">Add to Bag</button>
+          </form>
+
+          <!-- Wishlist button -->
+          <button class="btn-wishlist" data-product-id="{{ product.id }}" aria-label="Add to Wishlist">
+            <i class="fa fa-heart"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Details Section -->
+    <div class="details-section mt-5 fade-in">
+      <h5>Product Details</h5>
+      <div id="details-box" class="read-more-content">
+        {% if product.description %}
+          <h6>Description</h6>
+          <p>{{ product.description|safe }}</p>
+        {% endif %}
+        
+        {% if product.ingredients %}
+          <h6>Ingredients</h6>
+          <p>{{ product.ingredients|safe }}</p>
+        {% endif %}
+        
+        {% if product.how_to_use %}
+          <h6>How to Use</h6>
+          <p>{{ product.how_to_use|safe }}</p>
+        {% endif %}
+        
+        {% if product.expiry_date %}
+          <h6>Expiry Date</h6>
+          <p>{{ product.expiry_date }}</p>
+        {% endif %}
+       
+        
+        
+        {% if product.brand_address %}
+          <h6>Brand Address</h6>
+          <p>{{ product.brand_address }}</p>
+        {% endif %}
+        
+        {% if product.product_type == 'Skincare' and product.skin_type != 'None' %}
+          <h6>Skin Type</h6>
+          <p>{{ product.skin_type }}</p>
+        {% endif %}
+        
+        {% if product.product_type == 'Makeup' and product.skin_tone != 'None' %}
+          <h6>Skin Tone</h6>
+          <p>{{ product.skin_tone }}</p>
+        {% endif %}
+        
+        {% if product.product_type == 'Haircare' and product.hair_texture != 'None' %}
+          <h6>Hair Texture</h6>
+          <p>{{ product.hair_texture }}</p>
+        {% endif %}
+       
+        
+     
+        
+    
+
+        <!-- Ratings and Reviews Section -->
+<div class="reviews-section mt-5">
+  <h5>Customer Reviews</h5>
+  <p>Average Rating: ⭐ {{ avg_rating }} / 5 ({{ total_ratings }} Ratings)</p>
+
+  {% if reviews %}
+    <ul class="list-group">
+      {% for review in reviews %}
+        <li class="list-group-item">
+          <strong>{{ review.rating.user.username }}</strong>  
+          <span>⭐ {{ review.rating.rating }}</span>
+          <p>{{ review.review_text }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No reviews yet for this product.</p>
+  {% endif %}
+</div>
+      </div>
+      <button id="read-more-btn" class="read-more-btn" aria-expanded="false">Read More</button>
+    </div>
+<!-- Review and Rating Section -->
+
+    <!-- Footer Info -->
+   <div class="footer-info mt-4 text-muted"><div><p><i class="bi bi-shield-check me-1"></i> 100% Genuine Products</p><p><i class="bi bi-arrow-return-left me-1"></i> Easy Return Policy</p></div><div><p>Sold by: {{ product.brand_name|default:"Unknown" }}</p></div></div>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+  <script>
+    // Change main image on thumbnail click
+    function changeMainImage(thumb, src) {
+      const mainImage = document.getElementById('main-image');
+      if (mainImage) {
+        mainImage.src = src;
+        document.querySelectorAll('.thumbnail-img').forEach(img => {
+          img.classList.remove('active');
+          img.setAttribute('aria-selected', 'false');
+        });
+        thumb.classList.add('active');
+        thumb.setAttribute('aria-selected', 'true');
+      }
+    }
+
+    // Shade selection
+    document.querySelectorAll('.shade-box').forEach(box => {
+      box.addEventListener('click', function () {
+        document.querySelectorAll('.shade-box').forEach(b => {
+          b.classList.remove('selected');
+          b.setAttribute('aria-checked', 'false');
+        });
+        this.classList.add('selected');
+        this.setAttribute('aria-checked', 'true');
+        const selectedShade = document.getElementById('selected-shade');
+        if (selectedShade) selectedShade.textContent = this.dataset.shade;
+      });
+      box.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          document.querySelectorAll('.shade-box').forEach(b => {
+            b.classList.remove('selected');
+            b.setAttribute('aria-checked', 'false');
+          });
+          this.classList.add('selected');
+          this.setAttribute('aria-checked', 'true');
+          const selectedShade = document.getElementById('selected-shade');
+          if (selectedShade) selectedShade.textContent = this.dataset.shade;
+        }
+      });
+    });
+
+    // Read more functionality
+    const readMoreBtn = document.getElementById('read-more-btn');
+    const detailText = document.getElementById('details-box');
+    if (readMoreBtn && detailText) {
+      readMoreBtn.addEventListener('click', () => {
+        const isOpen = detailText.classList.toggle('open');
+        readMoreBtn.textContent = isOpen ? 'Read Less' : 'Read More';
+        readMoreBtn.setAttribute('aria-expanded', isOpen);
+      });
+    }
+
+    // Countdown timer
+    function startTimer() {
+      const endDate = new Date('2025-06-30T23:59:59').getTime(); // Updated to a future date
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = endDate - now;
+
+        if (distance <= 0) {
+          clearInterval(interval);
+          daysEl.textContent = '00';
+          hoursEl.textContent = '00';
+          minutesEl.textContent = '00';
+          secondsEl.textContent = '00';
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        daysEl.textContent = days.toString().padStart(2, '0');
+        hoursEl.textContent = hours.toString().padStart(2, '0');
+        minutesEl.textContent = minutes.toString().padStart(2, '0');
+        secondsEl.textContent = seconds.toString().padStart(2, '0');
+      }, 1000);
+    }
+
+    startTimer();
+
+    // Scroll thumbnails
+    function scrollThumbnails(direction) {
+      const container = document.getElementById('thumbnail-container');
+      const scrollAmount = 100;
+      if (direction === 'up') {
+        container.scrollTop -= scrollAmount;
+      } else {
+        container.scrollTop += scrollAmount;
+      }
+    }
+
+    // CSRF Token and Wishlist Functionality
+    function getCSRFToken() {
+      return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const wishlistBtn = document.querySelector('.btn-wishlist');
+      const messageBox = document.getElementById('wishlist-message');
+
+      function showMessage(message) {
+        if (!messageBox) return;
+        messageBox.textContent = message;
+        messageBox.style.display = 'block';
+        setTimeout(() => {
+          messageBox.style.display = 'none';
+        }, 3000);
+      }
+
+      if (wishlistBtn) {
+        wishlistBtn.addEventListener('click', function () {
+          const productId = this.getAttribute('data-product-id');
+
+          fetch(`/add-to-wishlist/${productId}/`, {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': getCookie('csrftoken'),
+              'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin',
+          })
+          .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+          })
+          .then(data => {
+            showMessage(data.message);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            showMessage('Something went wrong. Please try again.');
+          });
+        });
+      }
+
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    });
+  </script>
+</body>
+</html>

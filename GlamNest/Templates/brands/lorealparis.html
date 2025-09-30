@@ -1,0 +1,596 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>L'Oréal Paris</title>
+
+  <!-- Bootstrap & AOS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: url("{% static 'images/loreal_img.jpg' %}") no-repeat center center/cover;
+        height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(20, 20, 20, 0.708);
+        position: relative;
+        text-align: center;
+    }
+
+    .hero-section::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(175, 168, 168, 0.593);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-content h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+    }
+
+    .hero-content p {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .btn-primary {
+        background-color: #ff7f7f;
+        border: none;
+        padding: 10px 25px;
+        font-size: 1.2rem;
+        border-radius: 30px;
+        text-decoration: none;
+        color: white;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #ff4f4f;
+        transform: scale(1.1);
+    }
+
+    .btn-dark {
+        background-color: #333;
+        border: none;
+        padding: 10px 25px;
+        font-size: 1.2rem;
+        border-radius: 30px;
+        text-decoration: none;
+        color: white;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-dark:hover {
+        background-color: #555;
+        transform: scale(1.1);
+    }
+
+    /* About */
+    .about-section {
+        padding: 60px 0;
+        background: linear-gradient(135deg, #ffffff, #f9f9f9);
+        text-align: center;
+    }
+
+    .about-section h2 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .about-section p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .about-img {
+        max-width: 100%;
+        width: 400px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease;
+    }
+
+    .about-img:hover {
+        transform: translateY(-10px);
+    }
+
+    .about-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: nowrap;
+    }
+
+    .about-text {
+        max-width: 500px;
+        text-align: left;
+    }
+
+    .about-text h3 {
+        font-size: 1.8rem;
+        color: #0f0f0f;
+        margin-bottom: 15px;
+    }
+
+    /* Product Carousel */
+    .scrolling-wrapper {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 20px;
+    }
+
+    .product-card {
+        scroll-snap-align: start;
+        flex-shrink: 0;
+        width: 250px;
+        border-radius: 15px;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+    }
+
+    .product-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Beauty Tips & Tutorials */
+    .tips-section {
+        padding: 60px 0;
+        background-color: #fff;
+    }
+
+    .tips-section h2 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .tips-card {
+        scroll-snap-align: start;
+        flex-shrink: 0;
+        width: 300px;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .tips-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .tips-card video,
+    .tips-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .tips-card .card-body {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .tips-card .card-title {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .tips-card .card-text {
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .tips-card .quote-link {
+        display: block;
+        text-decoration: none;
+    }
+
+    /* Ingredients Spotlight */
+    .ingredients-section {
+        padding: 60px 0;
+        background: linear-gradient(135deg, #f9f9f9, #fff);
+    }
+
+    .ingredients-section h2 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .ingredient-card {
+        border-radius: 15px;
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 20px;
+    }
+
+    .ingredient-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .ingredient-card img {
+        width: 100%;
+        max-width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .ingredient-card h5 {
+        font-size: 1.3rem;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .ingredient-card p {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    /* Contact */
+    .contact-section {
+        background-color: #fff;
+        padding: 40px 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .contact-section h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .contact-form {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        border-radius: 25px;
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        border: 1px solid #ccc;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #ff7f7f;
+        box-shadow: 0 0 5px rgba(255, 127, 127, 0.3);
+        transform: scale(1.02);
+        outline: none;
+    }
+
+    .form-message {
+        text-align: center;
+        margin-top: 15px;
+        color: #28a745;
+        font-size: 0.9rem;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .form-message.show {
+        opacity: 1;
+    }
+
+    /* Footer */
+    .footer {
+        background-color: #222;
+        color: white;
+        text-align: center;
+        padding: 30px 0;
+    }
+
+    .social-media a {
+        margin: 0 15px;
+        color: white;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .social-media a:hover {
+        color: #ff7f7f;
+        transform: translateY(-5px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-content h1 {
+            font-size: 2.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+        }
+
+        .about-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .about-text {
+            text-align: center;
+        }
+
+        .about-img {
+            width: 100%;
+        }
+
+        .form-row {
+            flex-direction: column;
+        }
+
+        .tips-card {
+            width: 250px;
+        }
+
+        .ingredient-card {
+            padding: 15px;
+        }
+
+        .ingredient-card img {
+            max-width: 100px;
+            height: 100px;
+        }
+    }
+  </style>
+</head>
+<body>
+
+  {% include 'brands/brands_navebar.html' %}
+<div class="container mt-4">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} d-flex align-items-center shadow-sm rounded-4 px-4 py-3" role="alert">
+        <i class="bi 
+          {% if message.tags == 'success' %}bi-check-circle-fill text-success
+          {% elif message.tags == 'error' %}bi-x-circle-fill text-danger
+          {% elif message.tags == 'warning' %}bi-exclamation-triangle-fill text-warning
+          {% else %}bi-info-circle-fill text-primary{% endif %} me-3 fs-5"></i>
+        <div class="flex-grow-1">
+          {{ message|safe }}
+        </div>
+        <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+  <!-- Hero Section -->
+  <section class="hero-section" data-aos="fade-in" data-aos-duration="1000">
+      <div class="hero-content" data-aos="zoom-in" data-aos-delay="200">
+          <h1 data-aos="fade-up" data-aos-delay="400">Discover Elegance with<br> our Collections</h1>
+          <p data-aos="fade-up" data-aos-delay="600">Timeless beauty, powered by innovation.</p>
+          <a href="#" class="btn btn-dark" data-aos="fade-up" data-aos-delay="800">Explore Now</a>
+      </div>
+  </section>
+
+  <!-- Product Carousel Section -->
+  <section class="py-5" style="background-color:#fff;" data-aos="fade-up" data-aos-duration="1000">
+      <div class="container">
+          <h2 class="text-center mb-4" data-aos="fade-in" data-aos-delay="200">Our L'Oréal Paris Products</h2>
+          <div class="scrolling-wrapper d-flex px-2">
+              {% for product in products %}
+              <div class="card product-card me-3" data-aos="fade-up" data-aos-delay="{% cycle '100' '200' '300' '400' %}">
+                  <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.product_name }}" style="height: 200px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                  <div class="card-body text-center">
+                      <h5 class="card-title" data-aos="fade-in" data-aos-delay="500">{{ product.product_name }}</h5>
+                      <p class="card-text text-muted" data-aos="fade-in" data-aos-delay="600">₹ {{ product.price }}</p>
+                      <a href="{% url 'User:product_detail' product.id %}" class="btn btn-sm btn-dark" data-aos="fade-in" data-aos-delay="700">View</a>
+                  </div>
+              </div>
+              {% empty %}
+              <p class="text-center" data-aos="fade-in" data-aos-delay="200">No products available at the moment.</p>
+              {% endfor %}
+          </div>
+      </div>
+  </section>
+
+  <!-- Beauty Tips & Tutorials Section -->
+  <section class="tips-section" data-aos="fade-up" data-aos-duration="1000">
+      <div class="container">
+          <h2 class="text-center mb-4" data-aos="fade-in" data-aos-delay="200">Beauty Tips & Tutorials</h2>
+          <div class="scrolling-wrapper d-flex px-2">
+              <!-- Tip 1 -->
+              <div class="tips-card me-3" data-aos="fade-up" data-aos-delay="100">
+                  <a href="https://www.youtube.com/watch?v=hqNeUmOHBlQ" target="_blank">
+                      <img src="{% static 'images/skin2.jpg' %}" alt="30-sec Skincare Routine" class="img-fluid" style="border-radius:10px;">
+                      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3rem;color:white;">▶</div>
+                  </a>
+                  <div class="card-body">
+                      <h5 class="card-title">30-sec Skincare Routine</h5>
+                      <p class="card-text text-muted">Quick and effective steps to glowing skin.</p>
+                  </div>
+              </div>
+              <!-- Tip 2 -->
+              <div class="tips-card me-3" data-aos="fade-up" data-aos-delay="200">
+                  <img src="{% static 'images/l_makeup.jpg' %}" alt="Makeup Trends">
+                  <div class="card-body">
+                      <h5 class="card-title">Seasonal Makeup Trends</h5>
+                      <p class="card-text text-muted">Stay on top of the latest beauty trends this season.</p>
+                  </div>
+              </div>
+              <!-- Tip 3 -->
+              <div class="tips-card me-3" data-aos="fade-up" data-aos-delay="100">
+                  <a href="https://www.youtube.com/watch?v=GsqIlrpmddA" target="_blank">
+                      <img src="{% static 'images/new_loreal.jpg' %}" alt="30-sec New Launch lipsticks" class="img-fluid" style="border-radius:10px;">
+                      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3rem;color:white;">▶</div>
+                  </a>
+                  <div class="card-body">
+                      <h5 class="card-title">30-sec New Launch Lipsticks</h5>
+                      <p class="card-text text-muted">INFALLIBLE SKIN INK.</p>
+                  </div>
+              </div>
+              <!-- Tip 4 -->
+              <div class="tips-card me-3" data-aos="fade-up" data-aos-delay="200">
+                  <a href="https://www.lorealparisusa.com/beauty-magazine/makeup" target="_blank" class="quote-link" style="text-decoration: none;">
+                      <img src="{% static 'images/magazine.jpg' %}" alt="Makeup Trends">
+                      <div class="card-body">
+                          <h5 class="card-title"></h5>
+                          <p class="card-text text-muted">About L’Oréal Paris Beauty Magazine</p>
+                      </div>
+                  </a>
+              </div>
+              <!-- Tip 5 -->
+              <div class="tips-card me-3" data-aos="fade-up" data-aos-delay="200">
+                  <a href="https://www.lorealparisusa.com/beauty-magazine/makeup" target="_blank" class="quote-link" style="text-decoration: none;">
+                      <img src="{% static 'images/magazine_skin.jpg' %}" alt="Makeup Trends">
+                      <div class="card-body">
+                          <h5 class="card-title"></h5>
+                          <p class="card-text text-muted">Skin Care For Every Age</p>
+                      </div>
+                  </a>
+              </div>
+              <!-- Tip 6 -->
+              <div class="tips-card me-3" data-aos="fade-up" data-aos-delay="200">
+                  <a href="https://www.lorealparisusa.com/beauty-magazine/hair-care" target="_blank" class="quote-link" style="text-decoration: none;">
+                      <img src="{% static 'images/magazine_hair.jpg' %}" alt="Makeup Trends">
+                      <div class="card-body">
+                          <h5 class="card-title"></h5>
+                          <p class="card-text text-muted">All Things Healthy Hair</p>
+                      </div>
+                  </a>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- Ingredients Spotlight Section -->
+  <section class="ingredients-section" data-aos="fade-up" data-aos-duration="1000">
+      <div class="container">
+          <h2 class="text-center mb-4" data-aos="fade-in" data-aos-delay="200">Ingredients Spotlight</h2>
+          <div class="row g-4">
+              <!-- Ingredient 1 -->
+              <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                  <div class="ingredient-card text-center">
+                      <img src="{% static 'images/Loreal_Hyaluronic_Acid.jpg' %}" alt="Hyaluronic Acid">
+                      <h5>Hyaluronic Acid</h5>
+                      <p class="text-muted">Deep hydration and plump, youthful-looking skin.</p>
+                      <p class="text-muted">This powerhouse ingredient is key in our serums and moisturizers, delivering intense hydration to lock in moisture and enhance skin elasticity.</p>
+                  </div>
+              </div>
+              <!-- Ingredient 2 -->
+              <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                  <div class="ingredient-card text-center">
+                      <img src="{% static 'images/vitaminc.jpg' %}" alt="Vitamin C">
+                      <h5>Vitamin C</h5>
+                      <p class="text-muted">Brightens skin and reduces dark spots for a radiant glow.</p>
+                      <p class="text-muted">Featured in our brightening serums, Vitamin C helps even skin tone and boost radiance, making it essential for a luminous complexion.</p>
+                  </div>
+              </div>
+              <!-- Ingredient 3 -->
+              <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                  <div class="ingredient-card text-center">
+                      <img src="{% static 'images/glycolic.jpg' %}" alt="">
+                      <h5>Glycolic Acid</h5>
+                      <p class="text-muted">L'Oréal Paris offers several skincare products containing glycolic acid.</p>
+                      <p class="text-muted">The Revitalift Derm Intensives 3.5% Glycolic Acid  is for its effectiveness on the complexion is a resurfacing serum designed to visibly even skin tone, reduce dark spots and wrinkles .</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" data-aos="fade-up" data-aos-duration="1000">
+      <div class="container">
+          <h2 data-aos="fade-in" data-aos-delay="200">About Us</h2>
+          <div class="about-content">
+              <img src="{% static 'images/home_loreal.jpg' %}" alt="About Image" class="about-img" data-aos="fade-right" data-aos-delay="600">
+              <div class="about-text" data-aos="fade-left" data-aos-delay="400">
+                  <h3>Empowering Your Beauty</h3>
+                  <p>L'Oréal Paris celebrates elegance, innovation, and self-expression. Our products are crafted with cutting-edge technology and passion to help you express your unique beauty, every day.</p>
+                  <p>From skincare to makeup, we are committed to sustainability and quality, ensuring you shine with confidence.</p>
+                  <a href="#" class="btn btn-dark" data-aos="fade-up" data-aos-delay="600">Learn More</a>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-section" data-aos="fade-up" data-aos-duration="1000">
+      <div class="container">
+          <h2 class="text-center mb-4" data-aos="fade-in" data-aos-delay="200">Get in Touch</h2>
+          <form id="contactForm" class="contact-form" method="POST" action="{% url 'User:contact_submit_loreal' %}" data-aos="fade-up" data-aos-delay="400">
+              {% csrf_token %}
+              <div class="form-group">
+                  <input type="text" class="form-control" name="name" placeholder="Your Name" required data-aos="fade-up" data-aos-delay="600">
+              </div>
+              <div class="form-group">
+                  <input type="email" class="form-control" name="email" placeholder="Your Email" required data-aos="fade-up" data-aos-delay="700">
+              </div>
+              <div class="form-group">
+                  <textarea class="form-control" name="message" rows="3" placeholder="Your Message" required data-aos="fade-up" data-aos-delay="800"></textarea>
+              </div>
+              <button type="submit" class="btn btn-dark d-block mx-auto" data-aos="fade-up" data-aos-delay="900">Send</button>
+          </form>
+      </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" data-aos="fade-up" data-aos-duration="1000">
+      <div class="container">
+          <p data-aos="fade-in" data-aos-delay="200">© 2025 GlamNest. All rights reserved.</p>
+          <div class="social-media" data-aos="fade-in" data-aos-delay="400">
+              <a href="#" data-aos="fade-up" data-aos-delay="600">Facebook</a>
+              <a href="#" data-aos="fade-up" data-aos-delay="700">Twitter</a>
+              <a href="#" data-aos="fade-up" data-aos-delay="800">Instagram</a>
+          </div>
+      </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+      AOS.init({
+          duration: 1000,
+          once: true
+      });
+  </script>
+</body>
+</html>

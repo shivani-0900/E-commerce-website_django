@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maybelline Makeup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* HERO IMAGE */
+    .hero-image {
+      position: relative;
+      min-height: 60vh;
+      background: url("{% static 'images/maybelline_home2.jpg' %}") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 40px;
+      text-align: center;
+      border-radius: 10px;
+    }
+
+    .hero-overlay h2 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px #000000d6;
+    }
+
+    .hero-overlay p {
+      font-size: 1.2rem;
+    }
+
+    /* ANIMATION */
+    .animate {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-in-out;
+    }
+
+    .animate.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* PRODUCT CARD */
+    .product-card {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .product-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .featured-badge {
+      background-color: #dc3545;
+      color: white;
+      padding: 0.3rem 0.6rem;
+      border-radius: 0.3rem;
+      font-size: 0.75rem;
+    }
+
+    /* ICON HOVER */
+    .bi:hover {
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  {% include 'brands/maybelline_navebar.html' %}
+
+  <!-- Hero Banner -->
+  <section class="hero-image">
+    <div class="hero-overlay animate">
+      <h2><i class="bi bi-stars"></i> Discover Maybelline Makeup</h2>
+      <p>Tailored for every skin tone & budget. Shine your way!</p>
+    </div>
+  </section>
+
+  <!-- Page Title -->
+  <div class="text-center my-5 animate">
+    <h2 class="text-uppercase fw-bold">
+      <i class="bi bi-brush"></i> Explore Our Products
+    </h2>
+    <p class="text-muted">Find the perfect match for your tone and style</p>
+  </div>
+
+  <!-- Filter Section -->
+  <section class="filter-section mb-5 container animate">
+    <form method="get" action="" class="row g-3 justify-content-center align-items-end">
+      <div class="col-md-3">
+        <label for="skintone">Skin Tone</label>
+        <select name="skin_tone" id="skintone" class="form-select">
+          <option value="">Select Skin Tone</option>
+          <option value="Fair" {% if request.GET.skin_tone == 'Fair' %}selected{% endif %}>Fair</option>
+          <option value="Medium" {% if request.GET.skin_tone == 'Medium' %}selected{% endif %}>Medium</option>
+          <option value="Olive" {% if request.GET.skin_tone == 'Olive' %}selected{% endif %}>Olive</option>
+          <option value="Dark" {% if request.GET.skin_tone == 'Dark' %}selected{% endif %}>Dark</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="price">Price Range</label>
+        <select name="price" id="price" class="form-select">
+          <option value="">Select Price</option>
+          <option value="low" {% if request.GET.price == 'low' %}selected{% endif %}>Under ₹500</option>
+          <option value="mid" {% if request.GET.price == 'mid' %}selected{% endif %}>₹500 - ₹1000</option>
+          <option value="high" {% if request.GET.price == 'high' %}selected{% endif %}>Above ₹1000</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-grid">
+        <button type="submit" class="btn btn-dark">Apply</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Product Display -->
+  <section id="products" class="container mb-5 animate">
+    <h4 class="mb-4">Makeup Essentials</h4>
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card product-card h-100 position-relative animate">
+          {% if product.is_featured %}
+            <span class="featured-badge position-absolute top-0 end-0 m-2">Featured</span>
+          {% endif %}
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.product_name }}">
+          {% else %}
+            <img src="{% static 'images/default_product.jpg' %}" class="card-img-top" alt="Default">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ product.product_name }}</h5>
+            <p class="text-primary fw-bold">₹{{ product.price }}</p>
+            <a href="{% url 'User:product_detail' product.id %}" class="btn btn-outline-dark">View Details</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No makeup products available at the moment.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Brand Info -->
+  <section class="container mb-5 animate">
+    <h4 class="text-center fw-bold mb-3">Why Choose Maybelline?</h4>
+    <div class="row text-center">
+      <div class="col-md-4">
+        <i class="bi bi-check-circle fs-2 text-success"></i>
+        <h6>Cruelty-Free</h6>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-palette fs-2 text-primary"></i>
+        <h6>Wide Shade Range</h6>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-shield-check fs-2 text-warning"></i>
+        <h6>Dermatologist Tested</h6>
+      </div>
+    </div>
+  </section>
+
+  <!-- JS + Animation Observer -->
+  <script>
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

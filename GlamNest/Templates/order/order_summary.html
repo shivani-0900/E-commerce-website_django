@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Summary</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f5f5f5;
+      font-family: 'Roboto', sans-serif;
+    }
+    .sidebar {
+      border-right: 1px solid #e5e7eb;
+    }
+    .payment-option {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .payment-option:hover {
+      background: #f9fafb;
+    }
+    .payment-option.active {
+      background: #fff1f2;
+      border-left: 4px solid #a7575f;
+    }
+    .payment-method-details {
+      padding: 1.5rem;
+    }
+    .bag-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .price-details {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    input, button {
+      transition: all 0.2s ease-in-out;
+    }
+    input:focus {
+      border-color: #f47281;
+      box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
+    }
+    button:hover {
+      background-color: #995a5c;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="max-w-6xl mx-auto my-8 flex flex-col md:flex-row">
+    <!-- Left Sidebar: Payment Method Options -->
+    <div class="w-full md:w-1/4 sidebar bg-white">
+      <div class="p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Payment Method Options</h2>
+        <div class="payment-option active" data-method="UPI">
+          <div class="flex items-center">
+            <span class="text-gray-700 font-medium">UPI</span>
+          </div>
+          <p class="text-sm text-gray-500">Google Pay, PhonePe, Paytm & more</p>
+        </div>
+        <div class="payment-option" data-method="Card">
+          <div class="flex items-center">
+            <span class="text-gray-700 font-medium">Credit/Debit Card</span>
+          </div>
+          <p class="text-sm text-gray-500">Visa, Mastercard, RuPay & more</p>
+        </div>
+        <div class="payment-option" data-method="COD">
+          <div class="flex items-center">
+            <span class="text-gray-700 font-medium">Cash on Delivery</span>
+          </div>
+          <p class="text-sm text-gray-500">Pay at your doorstep</p>
+        </div>
+        <div class="payment-option" data-method="NetBanking">
+          <div class="flex items-center">
+            <span class="text-gray-700 font-medium">NetBanking</span>
+          </div>
+          <p class="text-sm text-gray-500">Pay through your favourite bank</p>
+        </div>
+        <div class="payment-option" data-method="EMI">
+          <div class="flex items-center">
+            <span class="text-gray-700 font-medium">EMI</span>
+          </div>
+          <p class="text-sm text-gray-500">Easy installments</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Middle Section: Payment Details -->
+    <div class="w-full md:w-2/4 bg-white p-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-2">Order Summary</h2>
+      <p class="text-sm text-gray-500 mb-6">Review your order and choose a payment method</p>
+
+      <!-- Shipping Address -->
+      <div class="mb-6">
+        <h4 class="text-lg font-semibold text-gray-700 mb-2">Shipping Address</h4>
+        <p class="text-gray-600 bg-gray-50 p-4 rounded-md">
+          {{ address.full_name }}<br>
+          {{ address.address_line }}, {{ address.city }} - {{ address.pincode }}
+        </p>
+      </div>
+
+      <!-- Payment Method Details -->
+      <div id="payment-method-details" class="payment-method-details">
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">Pay with UPI</h4>
+        <form method="post" action="{% url 'place_order' %}" id="payment-form">
+          {% csrf_token %}
+          <input type="hidden" name="payment_method" id="payment_method" value="UPI">
+          <div id="payment-extra-fields" class="space-y-4 fade-in">
+            <div>
+              <label for="upi_id" class="block text-sm font-medium text-gray-700 mb-2">Enter UPI ID</label>
+              <input type="text" name="upi_id" id="upi_id" class="w-full p-3 border border-gray-300 rounded-md" required>
+            </div>
+          </div>
+          <button type="submit" class="w-full bg-brown-600 text-white p-3 rounded-md mt-6">Verify & Pay ₹{{ final_price|floatformat:2 }}</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Right Section: Bag Summary -->
+    <div class="w-full md:w-1/4 p-6">
+      <h4 class="text-lg font-semibold text-gray-700 mb-4">Bag ({{ cart_items|length }} Items)</h4>
+      {% for item in cart_items %}
+        <div class="bag-item mb-4">
+          <div class="flex justify-between">
+            <div>
+              <p class="text-gray-700 font-medium">{{ item.product.name }}</p>
+              <p class="text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
+            </div>
+            <p class="text-gray-700">₹{{ item.product.price|floatformat:2 }}</p>
+          </div>
+        </div>
+      {% endfor %}
+
+      <div class="price-details mt-4">
+        <h4 class="text-lg font-semibold text-gray-700 mb-2">Price Details</h4>
+        <div class="flex justify-between mb-2">
+          <span class="text-gray-600">Price</span>
+          <span class="text-gray-600">₹{{ total_price|floatformat:2 }}</span>
+        </div>
+        <div class="flex justify-between mb-2">
+          <span class="text-gray-600">You are saving</span>
+          <span class="text-green-600">₹{{ discount|floatformat:2 }}</span>
+        </div>
+        <div class="flex justify-between font-bold">
+          <span class="text-gray-800">Total</span>
+          <span class="text-gray-800">₹{{ final_price|floatformat:2 }}</span>
+        </div>
+      </div>
+
+      <p class="text-sm text-gray-500 mt-4">Expected Delivery Date: {{ expected_delivery_date }}</p>
+      <p class="text-sm text-gray-500 mt-2">Buy authentic products. Pay securely. Easy returns and exchange.</p>
+    </div>
+  </div>
+
+  <script>
+    const paymentOptions = document.querySelectorAll('.payment-option');
+    const paymentMethodDetails = document.getElementById('payment-method-details');
+    const paymentMethodInput = document.getElementById('payment_method');
+    const extraFields = document.getElementById('payment-extra-fields');
+    const paymentForm = document.getElementById('payment-form');
+
+    function updatePaymentDetails(method) {
+      paymentOptions.forEach(option => option.classList.remove('active'));
+      const selectedOption = document.querySelector(`.payment-option[data-method="${method}"]`);
+      selectedOption.classList.add('active');
+
+      let html = '';
+      let title = '';
+
+      switch (method) {
+        case 'UPI':
+          title = 'Pay with UPI';
+          html = `
+            <div>
+              <label for="upi_id" class="block text-sm font-medium text-gray-700 mb-2">Enter UPI ID</label>
+              <input type="text" name="upi_id" id="upi_id" class="w-full p-3 border border-gray-300 rounded-md" required>
+            </div>`;
+          break;
+        case 'Card':
+          title = 'Pay with Credit/Debit Card';
+          html = `
+            <div>
+              <label for="card_number" class="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
+              <input type="text" name="card_number" id="card_number" maxlength="16" class="w-full p-3 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+              <label for="card_expiry" class="block text-sm font-medium text-gray-700 mb-2">Expiry (MM/YY)</label>
+              <input type="text" name="card_expiry" id="card_expiry" maxlength="5" class="w-full p-3 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+              <label for="card_cvv" class="block text-sm font-medium text-gray-700 mb-2">CVV</label>
+              <input type="text" name="card_cvv" id="card_cvv" maxlength="3" class="w-full p-3 border border-gray-300 rounded-md" required>
+            </div>`;
+          break;
+        case 'COD':
+          title = 'Cash on Delivery';
+          html = '<p class="text-gray-600">Pay at your doorstep upon delivery.</p>';
+          break;
+        case 'NetBanking':
+          title = 'Pay with NetBanking';
+          html = `
+            <div>
+              <label for="bank_name" class="block text-sm font-medium text-gray-700 mb-2">Select Bank</label>
+              <select name="bank_name" id="bank_name" class="w-full p-3 border border-gray-300 rounded-md" required>
+                <option value="SBI">State Bank of India</option>
+                <option value="HDFC">HDFC Bank</option>
+                <option value="ICICI">ICICI Bank</option>
+                <option value="Axis">Axis Bank</option>
+              </select>
+            </div>`;
+          break;
+        case 'EMI':
+          title = 'Pay with EMI';
+          html = `
+            <div>
+              <label for="emi_months" class="block text-sm font-medium text-gray-700 mb-2">Number of EMI Months</label>
+              <input type="number" name="emi_months" id="emi_months" min="1" class="w-full p-3 border border-gray-300 rounded-md" required>
+            </div>
+            <div>
+              <label for="emi_monthly_amount" class="block text-sm font-medium text-gray-700 mb-2">Monthly EMI Amount</label>
+              <input type="number" name="emi_monthly_amount" id="emi_monthly_amount" step="0.01" class="w-full p-3 border border-gray-300 rounded-md" required>
+            </div>`;
+          break;
+      }
+
+      paymentMethodDetails.innerHTML = `
+        <h4 class="text-lg font-semibold text-gray-700 mb-4">${title}</h4>
+        <form method="post" action="{% url 'place_order' %}" id="payment-form">
+          {% csrf_token %}
+          <input type="hidden" name="payment_method" id="payment_method" value="${method}">
+          <div id="payment-extra-fields" class="space-y-4 fade-in">
+            ${html}
+          </div>
+          <button type="submit" class="w-full bg-pink-600 text-white p-3 rounded-md mt-6">Verify & Pay ₹{{ final_price|floatformat:2 }}</button>
+        </form>`;
+    }
+
+    paymentOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const method = option.getAttribute('data-method');
+        updatePaymentDetails(method);
+      });
+    });
+
+    // Initial render
+    document.addEventListener("DOMContentLoaded", () => {
+      updatePaymentDetails('UPI');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Wishlist | GlamNest</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+  <!-- Google Fonts: Playfair Display, Cormorant Garamond, Open Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@400;500;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <!-- AOS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <style>
+    /* General Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background: #fef9f8; /* Softer background for elegance */
+      
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+    }
+
+    /* Wishlist Container */
+    .wishlist-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    /* Wishlist Title */
+    .wishlist-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #a86f6a; /* Theme color */
+      position: relative;
+      display: inline-block;
+      padding-bottom: 8px;
+      margin-bottom: 30px;
+      letter-spacing: 1px;
+    }
+
+    .wishlist-icon {
+      color: #d9a7a1; /* Theme color */
+      margin-right: 10px;
+      font-size: 2.5rem;
+      vertical-align: middle;
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .wishlist-title::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #d9a7a1, #a86f6a); /* Theme gradient */
+      bottom: 0;
+      left: 0;
+      border-radius: 2px;
+    }
+
+    /* Row Styling */
+    .row.g-3 {
+      margin-left: 0;
+      margin-right: 0;
+      gap: 1rem;
+    }
+
+    /* Product Card */
+    .product-card {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4rem 4px  rgba(168, 111, 106, 0.8);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #f6e8e5; /* Theme border */
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 1rem 4px rgba(168, 111, 106, 0.15);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      padding: 15px;
+      background: linear-gradient(180deg, #fef9f8, #ffffff); /* Theme gradient */
+      border-bottom: 1px solid #f6e8e5;
+      transition: transform 0.3s ease;
+    }
+
+    .product-image:hover {
+      transform: scale(1.05);
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #d9a7a1; /* Theme border */
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: #a86f6a; /* Theme color */
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      z-index: 2;
+    }
+
+    .remove-btn:hover {
+      background-color: #a86f6a;
+      color: #fff;
+    }
+
+    .product-body {
+      padding: 15px;
+      text-align: center;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .product-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #2d2d2d;
+      min-height: 52px;
+      line-height: 1.4;
+    }
+
+    .price-line {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .price-line del {
+      color: #999;
+      margin-right: 8px;
+      font-size: 0.9rem;
+    }
+
+    .discount {
+      color: #2e7d32; /* Green for discount */
+      font-weight: 600;
+      margin-left: 6px;
+      font-size: 0.9rem;
+    }
+
+    .rating-box {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.9rem;
+      color: #f39c12; /* Gold for ratings */
+      margin-top: 10px;
+      border-top: 1px solid #f6e8e5; /* Theme border */
+      padding-top: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 15px;
+      background: #fef9f8; /* Theme background */
+    }
+
+    .empty-message {
+      font-family: 'Open Sans', sans-serif;
+      text-align: center;
+      font-size: 1.3rem;
+      color: #555;
+      margin-top: 50px;
+    }
+
+    .custom-btn {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.2s ease, transform 0.2s ease;
+      font-weight: 600;
+    }
+
+    .brown-btn {
+      background: linear-gradient(45deg, #d9a7a1, #a86f6a); /* Theme gradient */
+      color: #fff;
+    }
+
+    .brown-btn:hover {
+      background: linear-gradient(45deg, #a86f6a, #d9a7a1);
+      transform: scale(1.02);
+      box-shadow: 0 4px 10px rgba(168, 111, 106, 0.3);
+    }
+
+    .outline-btn {
+      background-color: transparent;
+      color: #a86f6a; /* Theme color */
+      border: 1px solid #d9a7a1; /* Theme border */
+    }
+
+    .outline-btn:hover {
+      background: #a86f6a;
+      color: #fff;
+      transform: scale(1.02);
+      box-shadow: 0 4px 10px rgba(168, 111, 106, 0.3);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      body {
+        padding-top: 80px;
+      }
+      .wishlist-title {
+        font-size: 2rem;
+      }
+      .wishlist-icon {
+        font-size: 2rem;
+      }
+      .product-image {
+        height: 180px;
+      }
+      .product-title {
+        font-size: 1rem;
+        min-height: 48px;
+      }
+      .price-line, .rating-box, .custom-btn {
+        font-size: 0.85rem;
+      }
+      .action-buttons {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .custom-btn {
+        padding: 8px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Fixed Navbar -->
+  <div class="navbar">
+    {% include 'buyer/user_navebar.html' %}
+  </div>
+
+  <div class="container wishlist-container">
+    <h2 class="wishlist-title" data-aos="fade-down" data-aos-duration="800">
+      <span class="wishlist-icon">♥</span> My Wishlist
+    </h2>
+
+    <div class="row g-3">
+      {% for item in wishlist_items %}
+        <div class="col-12 col-sm-6 col-md-4" data-aos="zoom-in-up" data-aos-duration="800" data-aos-delay="{% cycle 0 100 200 %}">
+          <div class="product-card">
+            <a href="{% url 'User:remove_from_wishlist' item.product.id %}" class="remove-btn" style="text-decoration: none;">×</a>
+            <a href="{% url 'User:product_detail' item.product.id %}" class="text-decoration-none text-dark">
+              <img src="{{ item.product.image.url }}" alt="{{ item.product.product_name }}" class="product-image">
+              <div class="product-body">
+                <div class="product-title">{{ item.product.product_name }}</div>
+                <div class="price-line">
+                  MRP: <del>₹{{ item.product.original_price }}</del>
+                  ₹{{ item.product.price }}
+                  <span class="discount">{{ item.product.discount }}% Off</span>
+                </div>
+                <div class="rating-box">
+                  ★★★★☆ ({{ item.product.review_count }})
+                </div>
+              </div>
+            </a>
+            <div class="action-buttons">
+              <form method="post" action="{% url 'add_to_cart' item.product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="custom-btn brown-btn">Add to Bag</button>
+              </form>
+              <form method="post" action="{% url 'User:product_detail' item.product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="custom-btn outline-btn">Show details</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p class="empty-message" data-aos="fade-up" data-aos-duration="800">No items in wishlist.</p>
+      {% endfor %}
+    </div>
+  </div>
+{% include 'footer_sec.html' %}
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
+    });
+  </script>
+</body>
+</html>

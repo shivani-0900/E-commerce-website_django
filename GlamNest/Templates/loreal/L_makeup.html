@@ -1,0 +1,275 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>L'Oréal Paris - Makeup</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <style>
+    body {
+      scroll-behavior: smooth;
+      background: linear-gradient(to bottom, #fff0f5, #ffffff);
+    }
+
+    .hero-banner {
+      background-image: url("{% static 'images/makeup4.jpg' %}");
+      background-size: cover;
+      background-position: center;
+      min-height: 450px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: 'Georgia', serif;
+      font-size: 2.8rem;
+      color: rgb(235, 99, 142);
+      overflow: hidden;
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    .hero-banner > div {
+      position: relative;
+      z-index: 2;
+      text-shadow: 2px 2px 6px rgba(205, 199, 199, 0.712);
+      animation: fadeInDown 1.5s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .cta-btn {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      padding: 10px 30px;
+      background-color: #fff;
+      color: #e83e8c;
+      border: 2px solid #e83e8c;
+      transition: all 0.4s ease;
+    }
+
+    .cta-btn:hover {
+      background-color: #e83e8c;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .product-card {
+      transition: all 0.4s ease;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .filter-section select {
+      border-radius: 12px;
+      padding: 10px;
+      font-size: 1rem;
+    }
+
+    .makeup-tips {
+      background: #fff0f5;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #dc3545;
+      color: white;
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 8px;
+      z-index: 2;
+    }
+
+    .floating-label {
+      position: relative;
+    }
+
+    .floating-label select {
+      padding-top: 1.5rem;
+    }
+
+    .floating-label label {
+      position: absolute;
+      top: 5px;
+      left: 12px;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .btn-outline-dark {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-outline-dark:hover {
+      background-color: #343a40;
+      color: #fff;
+    }
+    
+        /* Contact Section */
+        .contact-section {
+          background-color: #f9f9f9;
+          padding: 60px 20px;
+      }
+
+      .contact-section h2 {
+          font-size: 2.5rem;
+          text-align: center;
+          color: #333;
+          margin-bottom: 30px;
+      }
+
+      .contact-section .form-group {
+          margin-bottom: 20px;
+      }
+ /* Styling for Back to Home button */
+    .back-home-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #e8ebeb;
+      background-color: transparent;
+      border:  #000000;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .back-home-btn:hover {
+      background-color: #011214;
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0, 9, 10, 0.3);
+    }
+
+    .back-home-btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+{% include 'brands/brands_navebar.html' %}
+
+<!-- Hero -->
+<div class="hero-banner flex-column text-center">
+  <div>
+    <h1>L'Oréal Paris Makeup</h1>
+    <p class="fs-5">Unleash your beauty with expert makeup essentials</p>
+    <a href="#products" class="btn cta-btn">Shop Now</a>
+  </div>
+</div>
+
+<div class="container my-5">
+
+  <!-- Filter Section -->
+  <!-- Filter Section -->
+<section class="filter-section mb-5" data-aos="fade-up">
+  <h4 class="text-center mb-4">Filter by</h4>
+  <form method="get" action="" class="row g-3 justify-content-center align-items-end">
+   
+
+    <div class="col-md-3 floating-label">
+      <label for="skintone">Skin Tone</label>
+      <select name="skin_tone" id="skintone" class="form-select">
+        <option value="">Select Skin Tone</option>
+        <option value="Fair" {% if request.GET.skin_tone == 'Fair' %}selected{% endif %}>Fair</option>
+        <option value="Medium" {% if request.GET.skin_tone == 'Medium' %}selected{% endif %}>Medium</option>
+        <option value="Olive" {% if request.GET.skin_tone == 'Olive' %}selected{% endif %}>Olive</option>
+        <option value="Dark" {% if request.GET.skin_tone == 'Dark' %}selected{% endif %}>Dark</option>
+      </select>
+    </div>
+
+    <div class="col-md-3 floating-label">
+      <label for="price">Price Range</label>
+      <select name="price" id="price" class="form-select">
+        <option value="">Select Price</option>
+        <option value="low" {% if request.GET.price == 'low' %}selected{% endif %}>Under ₹500</option>
+        <option value="mid" {% if request.GET.price == 'mid' %}selected{% endif %}>₹500 - ₹1000</option>
+        <option value="high" {% if request.GET.price == 'high' %}selected{% endif %}>Above ₹1000</option>
+      </select>
+    </div>
+
+    <div class="col-md-2 d-grid">
+      <button type="submit" class="btn btn-dark">Apply</button>
+    </div>
+  </form>
+</section>
+
+  <!-- Product Display -->
+  <section id="products">
+    <h4 class="mb-4" data-aos="fade-right">Makeup Essentials</h4>
+    <div class="row">
+      {% for product in products %}
+        <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+          <div class="card product-card h-100 position-relative">
+            {% if product.is_featured %}
+              <span class="featured-badge">Featured</span>
+            {% endif %}
+            {% if product.image %}
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.product_name }}">
+            {% else %}
+              <img src="{% static 'images/default_product.jpg' %}" class="card-img-top" alt="Default">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ product.product_name }}</h5>
+              <p class="text-primary fw-bold">₹{{ product.price }}</p>
+              <a href="{% url 'User:product_detail' product.id %}" class="btn btn-outline-dark">Show Details</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-center">No makeup products available at the moment.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Tips Section -->
+  <section class="makeup-tips mt-5" data-aos="fade-up">
+    <h4 class="text-center mb-4">Makeup Tips & Tutorials</h4>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">Prep your skin with primer for a long-lasting base.</li>
+      <li class="list-group-item">Use the right shade of foundation that matches your skin tone.</li>
+      <li class="list-group-item">Blending is key — use brushes or a beauty sponge.</li>
+      <li class="list-group-item">Don’t forget sunscreen even under makeup.</li>
+    </ul>
+  </section>
+
+
+
+</div>
+<!-- Back to Home Button -->
+<div class="d-flex justify-content-center py-4">
+  <a href="{% url 'User:user_home' %}" class="back-home-btn" data-aos="fade-up" data-aos-delay="200">
+    Back to Home
+  </a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+  AOS.init({ duration: 1000, once: true });
+</script>
+</body>
+</html>

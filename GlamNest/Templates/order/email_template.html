@@ -1,0 +1,33 @@
+Hello {{ user.first_name }},
+
+Thank you for your purchase! Your order has been successfully placed.
+
+🧾 Order ID: {{ order.id }}  
+💳 Payment Method: {{ payment_method }}  
+📦 Expected Delivery Date: {{ expected_delivery_date }}
+
+---
+
+🛍️ Items Ordered:
+{% for item in order_items %}
+- {{ item.product.name }} (x{{ item.quantity }}) - ₹{{ item.price|floatformat:2 }} each
+{% endfor %}
+
+---
+
+💰 Order Summary:
+Subtotal: ₹{{ order.total_price|floatformat:2 }}  
+Discount Applied: -₹{{ order.discount_applied|floatformat:2 }}  
+**Total Paid: ₹{{ final_price|floatformat:2 }}**
+
+---
+
+🚚 Shipping To:
+{{ order.address.full_name }}  
+{{ order.address.address_line }}  
+{{ order.address.city }} - {{ order.address.pincode }}
+
+We will notify you once it’s shipped!
+
+Thanks again,  
+Your Store Team

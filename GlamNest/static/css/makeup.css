@@ -1,0 +1,102 @@
+body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .filter-bar {
+    background: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    z-index: 10;
+    position: relative;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  
+  .filter-dropdown .btn {
+    background-color: #f3f3f3;
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  
+  .filter-dropdown .dropdown-menu {
+    min-width: 200px;
+    font-size: 14px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .filter-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .makeup-banner {
+    background: url("../images/img7.jpg") no-repeat center center/cover;
+    height: 400px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .banner-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .makeup-title {
+    font-size: 3rem;
+    margin: 0;
+  }
+  
+  .makeup-tagline {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+  }
+  
+  .dropdown-menu {
+    animation: fadeDown 0.3s ease-in-out;
+    transform-origin: top center;
+  }
+  
+  @keyframes fadeDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  
+  .filter-dropdown .btn:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .banner-overlay {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideIn 1s ease-out forwards;
+    animation-delay: 0.2s;
+  }
+  
+  @keyframes slideIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

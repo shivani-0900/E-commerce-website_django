@@ -1,0 +1,398 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Skincare</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .hero-banner {
+      width: 100%;
+      height: 500px;
+      background-image: url("{% static 'images/L_skincare.5.jpg' %}");
+      background-size: cover;
+      background-position: center center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px #000;
+      filter: brightness(0.6);
+      font-family: 'Times New Roman', Times, serif;
+      animation: fadeInHero 1.5s ease-out;
+    }
+
+    @keyframes fadeInHero {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .text-shadow {
+      color: #f3f3f3;
+      text-shadow: 2px 2px 6px rgba(6, 6, 6, 0.75);
+    }
+
+    .slide-text {
+      animation: slideDown 2s ease-out;
+    }
+
+    @keyframes slideDown {
+      0% { transform: translateY(-50px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    .category-section h2,
+    .filter-section h4,
+    .tips-section h4,
+    .featured-products h4 {
+      margin-top: 40px;
+      font-weight: 600;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .category-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideIn 1s ease-out;
+      animation-fill-mode: backwards;
+    }
+
+    .category-card:nth-child(1) { animation-delay: 0.2s; }
+    .category-card:nth-child(2) { animation-delay: 0.4s; }
+    .category-card:nth-child(3) { animation-delay: 0.6s; }
+    .category-card:nth-child(4) { animation-delay: 0.8s; }
+
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateX(-30px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    .category-card img {
+      height: 220px;
+      object-fit: cover;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .product-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeInCard 1.2s ease-out;
+      animation-fill-mode: backwards;
+    }
+
+    .product-card:nth-child(1) { animation-delay: 0.3s; }
+    .product-card:nth-child(2) { animation-delay: 0.6s; }
+    .product-card:nth-child(3) { animation-delay: 0.9s; }
+
+    .product-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes fadeInCard {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .tips-box {
+      background-color: #f7f7f7;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .filter-section label {
+      font-weight: 500;
+    }
+
+    .skincare-steps .step-item {
+      transition: transform 0.4s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+      padding: 20px 10px;
+      border-radius: 15px;
+      background: #fefefe;
+      animation: fadeUp 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    .skincare-steps .step-item:nth-child(1) { animation-delay: 0.2s; }
+    .skincare-steps .step-item:nth-child(2) { animation-delay: 0.4s; }
+    .skincare-steps .step-item:nth-child(3) { animation-delay: 0.6s; }
+    .skincare-steps .step-item:nth-child(4) { animation-delay: 0.8s; }
+
+    .skincare-steps .step-item:hover {
+      background: #fff4f4;
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .step-icon {
+      width: 60px;
+      transition: transform 0.3s ease;
+    }
+
+    .step-icon:hover {
+      transform: scale(1.1);
+    }
+
+    .skin-select {
+      padding: 12px;
+      font-size: 1rem;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      background-color: #fff;
+      animation: fadeInSelect 1s ease-out;
+    }
+
+    .skin-select:focus {
+      border-color: #ff8ba7;
+      box-shadow: 0 0 10px rgba(255, 139, 167, 0.2);
+    }
+
+    @keyframes fadeInSelect {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .custom-select-wrapper {
+      position: relative;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .contact-section {
+      background-color: #f9f9f9;
+      padding: 60px 20px;
+      animation: fadeInSection 1.5s ease-out;
+    }
+
+    .contact-section h2 {
+      font-size: 2.5rem;
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    .contact-section .form-group {
+      margin-bottom: 20px;
+      animation: slideInForm 1s ease-out;
+      animation-fill-mode: backwards;
+    }
+
+    @keyframes slideInForm {
+      0% { opacity: 0; transform: translateX(-20px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes fadeInSection {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    /* Ensure elements are initially hidden for scroll animations */
+    .category-card, .product-card, .step-item, .skin-select, .contact-section, .form-group {
+      opacity: 0;
+    }
+
+    .animate {
+      opacity: 1 !important;
+      animation-play-state: running !important;
+    }
+     /* Styling for Back to Home button */
+    .back-home-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #e8ebeb;
+      background-color: transparent;
+      border:  #000000;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .back-home-btn:hover {
+      background-color: #011214;
+      color: #fff;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0, 9, 10, 0.3);
+    }
+
+    .back-home-btn:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+{% include 'brands/brands_navebar.html' %}
+
+<!-- Hero Banner -->
+<div class="hero-banner d-flex align-items-center justify-content-center text-white">
+    <h1 class="display-5 fw-bold text-shadow slide-text">Glow Naturally with our Skincare.</h1>
+</div>
+
+<div class="container">
+
+  <!-- Skincare Categories -->
+  <section class="category-section text-center">
+    <h2>Explore Categories</h2>
+    <div class="row mt-4">
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm category-card">
+          <img src="{% static 'images/loreal_cleanser2.jpg' %}" class="card-img-top" alt="Cleansers">
+          <div class="card-body">
+            <h5 class="card-title">Cleansers</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm category-card">
+          <img src="{% static 'images/loreal_moiturizer.jpg' %}" class="card-img-top" alt="Moisturizers">
+          <div class="card-body">
+            <h5 class="card-title">Moisturizers</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm category-card">
+          <img src="{% static 'images/loreal_serum.jpg' %}" class="card-img-top" alt="Serums">
+          <div class="card-body">
+            <h5 class="card-title">Serums</h5>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card h-100 shadow-sm category-card">
+          <img src="{% static 'images/loreal_sunscreen.jpg' %}" class="card-img-top" alt="Sunscreens">
+          <div class="card-body">
+            <h5 class="card-title">Sunscreens</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="filter-section mt-5">
+    <h4 class="text-center mb-4 fw-bold">Filter by Skin Type</h4>
+    <form method="GET" action="" class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="custom-select-wrapper">
+          <select name="skin_type" class="form-select skin-select">
+            <option value="" selected disabled>Choose your skin type</option>
+            <option value="Oily" {% if request.GET.skin_type == "Oily" %}selected{% endif %}>Oily</option>
+            <option value="Dry" {% if request.GET.skin_type == "Dry" %}selected{% endif %}>Dry</option>
+            <option value="Combination" {% if request.GET.skin_type == "Combination" %}selected{% endif %}>Combination</option>
+            <option value="Sensitive" {% if request.GET.skin_type == "Sensitive" %}selected{% endif %}>Sensitive</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="featured-products mt-5">
+    <h4>Featured Products</h4>
+    <div class="row mt-4">
+      {% for product in products %}
+        <div class="col-md-4 mb-4">
+          <div class="card product-card h-100">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.product_name }}">
+            {% else %}
+              <img src="{% static 'images/default_product.jpg' %}" class="card-img-top" alt="Default Image">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ product.product_name }}</h5>
+              <p><strong>₹{{ product.price }}</strong></p>
+              <a href="{% url 'User:product_detail' product.id %}" class="btn btn-outline-dark">Show Details</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p>No L'Oréal Paris skincare products available for this skin type.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="tips-section mt-5">
+    <h4 class="text-center mb-5 fw-bold">Build Your Skincare Routine</h4>
+    <div class="container skincare-steps">
+      <div class="row text-center gy-5">
+        <div class="col-md-3 step-item">
+          <img src="{% static 'images/cleanser_loreal.jpg' %}" alt="Cleanser" class="step-icon mb-3">
+          <h6 class="fw-semibold">Step 1: Cleanse</h6>
+          <p class="text-muted small">Gently cleanse to remove dirt and prep the skin.</p>
+        </div>
+        
+        <div class="col-md-3 step-item">
+          <img src="{% static 'images/moisteriser_loreal.jpg' %}" alt="Serum" class="step-icon mb-3">
+          <h6 class="fw-semibold">Step 2: Serum</h6>
+          <p class="text-muted small">Target skin concerns with active-rich serums.</p>
+        </div>
+        
+        <div class="col-md-3 step-item">
+          <img src="{% static 'images/serum_loreal.jpg' %}" alt="Moisturizer" class="step-icon mb-3">
+          <h6 class="fw-semibold">Step 3: Moisturize</h6>
+          <p class="text-muted small">Seal in hydration and smooth your skin texture.</p>
+        </div>
+        
+        <div class="col-md-3 step-item">
+          <img src="{% static 'images/suncreen_loreal.jpg' %}" alt="Sunscreen" class="step-icon mb-3">
+          <h6 class="fw-semibold">Step 4: Sunscreen</h6>
+          <p class="text-muted small">Protect from UV rays and prevent early aging.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+<!-- Back to Home Button -->
+<div class="d-flex justify-content-center py-4">
+  <a href="{% url 'User:user_home' %}" class="back-home-btn" data-aos="fade-up" data-aos-delay="200">
+    Back to Home
+  </a>
+</div>
+<script>
+  document.querySelector('.skin-select').addEventListener('change', function() {
+    this.form.submit();
+  });
+
+  // Trigger animations on scroll
+  const elements = document.querySelectorAll('.category-card, .product-card, .step-item, .skin-select, .contact-section, .form-group');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('animate');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  elements.forEach(element => {
+    observer.observe(element);
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Order</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Define custom colors for Tailwind to match the peach/rose theme
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            peach: {
+              50: '#fff5f5',
+              100: '#ffe4e6',
+              500: '#f78d8f',
+              600: '#e87979',
+              700: '#d66a6a',
+              800: '#c45b5b',
+              900: '#b24c4c',
+            },
+            rose: {
+              50: '#fff1f2',
+              100: '#fce7e9',
+              200: '#f9d8da',
+            },
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      background: linear-gradient(to right, #ffe4e6, #fff1f2); /* Match Order Details gradient */
+    }
+    .flip-card {
+      perspective: 1000px;
+    }
+    .flip-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    /* Hover effect for desktop */
+    @media (hover: hover) and (pointer: fine) {
+      .flip-card:hover .flip-inner {
+        transform: rotateY(180deg);
+      }
+    }
+    /* Click/tap effect for mobile and keyboard */
+    .flip-card.active .flip-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-front, .flip-back {
+      backface-visibility: hidden;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 1rem;
+    }
+    .flip-front {
+      background: linear-gradient(to right, #fef9c3, #fde68a);
+    }
+    .flip-front.current-step {
+      background: linear-gradient(to right, #f78d8f, #fbc2cb); /* Highlight current step with peach gradient */
+    }
+    .flip-back {
+      background: #ffffff;
+      transform: rotateY(180deg);
+    }
+    /* Fallback icon style if static file is missing */
+    .icon-fallback {
+      width: 48px;
+      height: 48px;
+      background-color: #f3f4f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    /* Focus styles for accessibility */
+    .flip-card:focus-within {
+      outline: 2px solid #f78d8f;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="py-10 px-4">
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-3xl font-bold text-center text-gray-800 mb-8" role="heading" aria-level="1">
+      🧭 Track Your Order
+    </h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for step in tracking_steps %}
+      <div class="flip-card w-full h-56 relative" tabindex="0" role="button" aria-label="View details for {{ step.label }}">
+        <div class="flip-inner w-full h-full relative">
+          <!-- Front -->
+          <div class="flip-front p-4 flex flex-col justify-center items-center shadow-lg {% if step.current %}current-step{% endif %}">
+            {% if step.label == 'Order Confirmed' %}
+              <img src="{% static 'icons/confirmed.png' %}" alt="Order Confirmed" class="w-12 h-12 mb-3" onerror="this.classList.add('icon-fallback'); this.src=''; this.innerHTML='📦';">
+            {% elif step.label == 'Shipped' %}
+              <img src="{% static 'icons/shipped.png' %}" alt="Shipped" class="w-12 h-12 mb-3" onerror="this.classList.add('icon-fallback'); this.src=''; this.innerHTML='🚚';">
+            {% elif step.label == 'Out For Delivery' %}
+              <img src="{% static 'icons/delivery.png' %}" alt="Out for Delivery" class="w-12 h-12 mb-3" onerror="this.classList.add('icon-fallback'); this.src=''; this.innerHTML='🚴';">
+            {% elif step.label == 'Delivered' %}
+              <img src="{% static 'icons/delivered.png' %}" alt="Delivered" class="w-12 h-12 mb-3" onerror="this.classList.add('icon-fallback'); this.src=''; this.innerHTML='✅';">
+            {% else %}
+              <img src="{% static 'icons/default.png' %}" alt="{{ step.label }}" class="w-12 h-12 mb-3" onerror="this.classList.add('icon-fallback'); this.src=''; this.innerHTML='📍';">
+            {% endif %}
+            <h3 class="text-lg font-semibold text-gray-800">{{ step.label }}</h3>
+          </div>
+
+          <!-- Back -->
+          <div class="flip-back p-4 shadow-lg flex flex-col justify-center items-center text-center">
+            <p class="text-sm text-gray-700 mb-2 font-medium">{{ step.note }}</p>
+            <span class="text-xs text-gray-500">{{ step.time }}</span>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if estimated_delivery %}
+    <div class="mt-10 text-center bg-white rounded-lg p-4 shadow-md border border-rose-100">
+      <p class="text-sm text-gray-700">
+        📦 Estimated Delivery: <span class="font-semibold text-peach-700">{{ estimated_delivery }}</span>
+      </p>
+    </div>
+    {% endif %}
+
+    <div class="mt-6 text-center">
+      <a href="{% url 'User:view_order' item.order.id %}" class="inline-block mt-4 px-6 py-2 bg-peach-500 text-white rounded-lg shadow hover:bg-peach-600 transition">
+        Back to Order Details
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Add click/tap support for flip cards on mobile and keyboard navigation
+    document.querySelectorAll('.flip-card').forEach(card => {
+      card.addEventListener('click', function () {
+        this.classList.toggle('active');
+      });
+      card.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          this.classList.toggle('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

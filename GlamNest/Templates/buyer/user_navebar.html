@@ -1,0 +1,355 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
+<style>
+  body {
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  body[data-theme="light"] {
+    background-color: #fdfbfa;
+    color: #333;
+  }
+
+  body[data-theme="dark"] {
+    background-color: #1a1a1a;
+    color: #f5f5f5;
+  }
+
+  .glass-navbar {
+    background: rgba(255, 255, 255, 0);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+     font-family: 'Courier New', Courier, monospace;
+  }
+
+  body[data-theme="dark"] .glass-navbar {
+    background: rgba(40, 40, 40, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-navbar .navbar-brand img {
+    max-height: 80px;
+    width: 150px;
+    animation: wiggle 1s infinite ease-in-out;
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(3deg); }
+    75% { transform: rotate(-3deg); }
+  }
+
+  .glass-navbar .nav-link, .nav-tabs .nav-link {
+    color: #333;
+    font-weight: 600;
+    font-size: 0.79rem;
+    padding: 10px 16px;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+    text-transform: uppercase;
+    margin: 0 8px;
+  }
+
+  body[data-theme="dark"] .glass-navbar .nav-link {
+    color: #f5f5f5;
+  }
+
+  .glass-navbar .nav-link:hover,
+  .glass-navbar .nav-link.active {
+    background: linear-gradient(145deg, #ffdada, #ffe9e9);
+    color: #D95D39 !important;
+    box-shadow: 0 0 12px rgba(217, 93, 57, 0.15);
+  }
+
+  body[data-theme="dark"] .glass-navbar .nav-link:hover,
+  body[data-theme="dark"] .glass-navbar .nav-link.active {
+    background: linear-gradient(145deg, #ff6b6b, #ff8e8e);
+  }
+
+  .glass-navbar .dropdown-menu {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  body[data-theme="dark"] .glass-navbar .dropdown-menu {
+    background: rgba(50, 50, 50, 0.9);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .glass-navbar .dropdown-item {
+    color: #333;
+    font-weight: 500;
+    padding: 10px 20px;
+    transition: background 0.3s ease;
+  }
+
+  body[data-theme="dark"] .glass-navbar .dropdown-item {
+    color: #f5f5f5;
+  }
+
+  .glass-navbar .dropdown-item:hover {
+    background-color: #fbe9e7;
+    color: #D95D39;
+  }
+
+  body[data-theme="dark"] .glass-navbar .dropdown-item:hover {
+    background-color: #444;
+    color: #ff8e8e;
+  }
+
+  .glass-navbar .nav-link i {
+    color: #D95D39;
+  }
+
+  body[data-theme="dark"] .glass-navbar .nav-link i {
+    color: #ff8e8e;
+  }
+
+  .glass-navbar .badge {
+    font-size: 0.7rem;
+    background-color: #D95D39;
+    color: white;
+  }
+
+  body[data-theme="dark"] .glass-navbar .badge {
+    background-color: #ff8e8e;
+  }
+
+  .glass-navbar .navbar-toggler {
+    border: none;
+  }
+
+  .glass-navbar .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='%23D95D39' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M4 6h16M4 12h16M4 18h16'%3E%3C/path%3E%3C/svg%3E");
+  }
+
+  body[data-theme="dark"] .glass-navbar .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg fill='none' stroke='%23ff8e8e' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M4 6h16M4 12h16M4 18h16'%3E%3C/path%3E%3C/svg%3E");
+  }
+
+  .auth-btn {
+    
+    color: #D95D39;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+   
+    text-decoration: none;
+  }
+
+  body[data-theme="dark"] .auth-btn {
+    background: linear-gradient(145deg, #ff6b6b, #ff8e8e);
+    color: #fff;
+  }
+
+  .auth-btn:hover {
+    background: linear-gradient(145deg, #ffe9e9, #ffdada);
+    color: #b73e1e;
+    box-shadow: 0 0 12px rgba(217, 93, 57, 0.3);
+  }
+
+  body[data-theme="dark"] .auth-btn:hover {
+    background: linear-gradient(145deg, #ff8e8e, #ff6b6b);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(255, 142, 142, 0.3);
+  }
+
+  .theme-toggle {
+    background: none;
+    border: none;
+    color: #D95D39;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.3s ease;
+  }
+
+  body[data-theme="dark"] .theme-toggle {
+    color: #ff8e8e;
+  }
+
+  .theme-toggle:hover {
+    color: #b73e1e;
+  }
+
+  body[data-theme="dark"] .theme-toggle:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .glass-navbar .navbar-brand img {
+      max-width: 160px;
+      max-height: 50px;
+    }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg glass-navbar sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="/user_home">
+      <img src="/static/images/glam_logo.png" alt="GlamNest Logo" />
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarMain">
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/shop' %}active{% endif %}" href="/user_home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if request.path == '/shop' %}active{% endif %}" href="/shopall">Shop All</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Brands</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/loreal">L'Oréal Paris</a></li>
+            <li><a class="dropdown-item" href="/lakmae">Lakmé</a></li>
+            <li><a class="dropdown-item" href="/maybelline">Maybelline</a></li>
+            
+           
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Categories</a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/skincare">Skincare</a></li>
+            <li><a class="dropdown-item" href="/makeups">Makeup</a></li>
+            <li><a class="dropdown-item" href="/haircare">Haircare</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-danger fw-semibold" href="{% url 'available_offers' %}">Offers</a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center gap-3">
+        {% if request.user.is_authenticated %}
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" data-bs-toggle="dropdown" title="Account">
+    {% if request.user.profile_image and request.user.profile_image.name %}
+  <img src="{{ request.user.profile_image.url }}"
+       alt="Profile"
+       class="rounded-circle"
+       width="32" height="32"
+       style="object-fit: cover;">
+{% else %}
+  <img src="{% static 'media/profile_icon.jpg' %}"
+       alt="Default Profile"
+       class="rounded-circle"
+       width="32" height="32"
+       style="object-fit: cover;">
+{% endif %}
+              <span class="fw-semibold text-capitalize">{{ request.user.username }}</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/view_profile/{{ request.user.id }}"><i class="bi bi-person me-2"></i> My Profile</a></li>
+              <li><a class="dropdown-item" href="/myorders"><i class="bi bi-box-seam me-2"></i> My Orders</a></li>
+              <li><a class="dropdown-item" href="/view_wishlist"><i class="bi bi-heart me-2"></i> Wishlist</a></li>
+              <li><a class="dropdown-item" href="/help_home"><i class="bi bi-question-circle"></i> Help ?</a></li>
+              <li>
+                <a class="dropdown-item" href="{% url 'User:change_password' %}">
+                  <i class="bi bi-lock me-2"></i> Change Password
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="{% url 'User:logout_all' %}"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+            </ul>
+          </div>
+          {% with wishlist_count=request.user.wishlist_set.count %}
+            <!-- Wishlist Icon -->
+            <a href="/view_wishlist" class="nav-link position-relative" title="Wishlist">
+              <i class="bi bi-heart fs-5"></i>
+              <span id="wishlist-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill">
+                {{ wishlist_count|default:"0" }}
+              </span>
+            </a>
+          {% endwith %}
+        {% else %}
+          <!-- Sign Up Dropdown for Unauthenticated Users -->
+          <div class="nav-item dropdown">
+            <a class="auth-btn dropdown-toggle" href="#" data-bs-toggle="dropdown" role="button">
+              Sign Up
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/userreg">User Sign Up</a></li>
+              <li><a class="dropdown-item" href="/sellerreg">Seller Sign Up</a></li>
+            </ul>
+          </div>
+          <!-- Login Button -->
+          <a href="/uselogin" class="auth-btn">Login</a>
+        {% endif %}
+        <!-- Cart Icon -->
+        <a href="{% url 'view_cart' %}" class="nav-link position-relative" title="Cart">
+  <i class="bi bi-bag-fill me-1 fs-5"></i>
+  <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+    {{ cart_count|default:"0" }}
+  </span>
+</a>
+
+        <!-- Dark Mode Toggle -->
+        <button class="theme-toggle" title="Toggle Theme" onclick="toggleTheme()">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Check for saved theme preference or default to light
+  const currentTheme = localStorage.getItem('theme') || 'light';
+  document.body.setAttribute('data-theme', currentTheme);
+  updateThemeIcon();
+
+  function toggleTheme() {
+    const body = document.body;
+    const newTheme = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateThemeIcon();
+  }
+
+  function updateThemeIcon() {
+    const themeIcon = document.querySelector('.theme-toggle i');
+    if (document.body.getAttribute('data-theme') === 'dark') {
+      themeIcon.classList.remove('bi-moon-stars-fill');
+      themeIcon.classList.add('bi-sun-fill');
+    } else {
+      themeIcon.classList.remove('bi-sun-fill');
+      themeIcon.classList.add('bi-moon-stars-fill');
+    }
+  }
+</script>
+  
+</body>
+</html>

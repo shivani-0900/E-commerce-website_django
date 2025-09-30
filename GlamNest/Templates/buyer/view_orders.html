@@ -1,0 +1,431 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Open+Sans:wght@400;600&family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #ffe4e6, #fff1f2); /* Rose gradient from my_orders */
+            font-family: 'Open Sans', sans-serif;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            text-transform: uppercase;
+        }
+        h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        .status, .btn, .back-home-btn {
+            font-family: 'Lato', sans-serif;
+        }
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .star-rating span.filled {
+            color: #f9a8d4;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .btn, .back-home-btn {
+            transition: all 0.3s ease;
+        }
+        .btn:hover, .back-home-btn:hover {
+            transform: translateY(-2px);
+        }
+        .back-home-btn {
+            background: linear-gradient(to right, #f78d8fdd, #fbc2cb); /* Matches my_orders button gradient */
+            color: white;
+            border-radius: 9999px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(245, 100, 150, 0.3); /* Matches my_orders button shadow */
+            transition: background 0.3s ease, transform 0.3s ease;
+            text-align: center;
+        }
+        .back-home-btn:hover {
+            background: linear-gradient(to right, #f55757, #fb9398); /* Matches my_orders hover gradient */
+            transform: scale(1.05);
+        }
+        .sidebar, .order-card, .order-summary {
+            background: #fff;
+            border: 1px solid #fce7e9; /* Rose border from my_orders */
+            box-shadow: 0 4px 8px rgba(252, 231, 233, 0.4); /* Rose shadow from my_orders */
+        }
+        .order-card:hover {
+            box-shadow: 0 12px 24px rgba(252, 231, 233, 0.5); /* Rose hover shadow from my_orders */
+        }
+        .item-details p {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 200px;
+        }
+        .sidebar p {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 100%;
+        }
+        .order-summary p {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        /* Added for status alignment fix */
+        .status-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            align-items: flex-end; /* Default right-align for mobile */
+        }
+        @media (min-width: 640px) {
+            .status-container {
+                align-items: flex-start; /* Left-align on sm: and above */
+            }
+        }
+        /* Ensure review form elements are visible */
+        .review-form {
+            position: relative;
+            z-index: 1;
+            overflow: visible;
+        }
+        .order-card {
+            overflow: visible;
+        }
+        .review-form button[type="submit"] {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: relative;
+            z-index: 2;
+            background-color: #e87979; /* Fallback for bg-peach-600 */
+            color: white !important;
+        }
+        .review-form button[type="submit"]:hover {
+            background-color: #d66a6a; /* Fallback for hover:bg-peach-700 */
+        }
+    </style>
+</head>
+<body class="antialiased">
+<div class="container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6">
+
+    <!-- Main Content -->
+    <div class="flex-grow">
+        <!-- Header -->
+        <header class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gradient-to-r from-white to-rose-50 rounded-xl shadow-lg p-6 border border-rose-100 fade-in transition-all duration-300 ease-in-out">
+            <div class="mb-4 sm:mb-0">
+                <h1 class="text-3xl font-bold text-peach-900 flex items-center gap-2">
+                    <i class="bi bi-receipt-cutoff text-peach-700 text-2xl"></i>
+                    Order of {{ order.buyer.username }}
+                </h1>
+                <p class="mt-1 text-sm text-peach-600 tracking-wide">
+                    Placed on {{ order.created_at|date:"M d, Y" }} at {{ order.created_at|time:"H:i" }}
+                </p>
+                <p class="text-sm text-peach-700 mt-1">
+                    <span class="font-semibold">Order Id:</span> {{ order.id }}
+                </p>
+            </div>
+            <div class="text-right">
+                <span class="inline-block px-4 py-2 bg-peach-100 text-peach-800 rounded-full text-sm font-medium shadow">
+                    Status: <span class="font-semibold">{{ order.status|default:"Processing" }}</span>
+                </span>
+            </div>
+        </header>
+
+        <!-- Items -->
+        <section class="space-y-4">
+            {% for item in items %}
+            <div class="order-card rounded-lg p-4 transition-shadow duration-300 fade-in">
+                <div class="flex flex-col sm:flex-row gap-4 items-start">
+                    <!-- Product Image -->
+                    <div class="flex-shrink-0">
+                        <img src="{{ item.product.image.url }}" alt="{{ item.product.product_name }}"
+                             class="w-24 h-24 object-cover rounded-md border border-rose-200">
+                    </div>
+
+                    <!-- Product Details -->
+                    <div class="flex-grow item-details">
+                        <h3 class="text-lg font-semibold text-peach-900">
+                            {{ item.product.product_name }}
+                        </h3>
+                        <div class="mt-2 text-xs text-peach-600 space-y-2">
+                            <p>
+                                <span><strong>Brand:</strong></span>
+                                <span>{{ item.product.brand_name }}</span>
+                            </p>
+                            <p>
+                                <span><strong>Quantity:</strong></span>
+                                <span>{{ item.quantity }}</span>
+                            </p>
+                            <p>
+                                <span><strong>Price:</strong></span>
+                                <span>₹{{ item.price }}</span>
+                            </p>
+                        </div>
+
+                        {% if item.status == "Delivered" %}
+                            {% if item.user_review %}
+                                <div class="mt-4 bg-peach-50 p-3 border border-rose-200 rounded-md">
+                                    <p class="text-xs font-medium text-peach-700">Your Review</p>
+                                    <div class="star-rating mt-1 flex gap-0.5">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= item.user_review.rating %}
+                                                <span class="filled text-lg">★</span>
+                                            {% else %}
+                                                <span class="text-rose-200 text-lg">★</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <p class="mt-1 text-xs text-peach-800">{{ item.user_review.review.review_text }}</p>
+<p class="mt-1 text-xs text-peach-800">Reviewed on: {{ item.user_review.created_at|date:"M d, Y" }}</p>
+                                    {% if item.user_review.image %}
+                                        <img src="{{ item.user_review.image.url }}" alt="Review Image"
+                                             class="mt-2 w-16 h-16 object-cover rounded-md border border-rose-200">
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <div class="text-xs text-peach-700 mb-2">DEBUG: Review form should be visible for item {{ item.id }} (Status: {{ item.status }})</div>
+                                <form method="post" action="{% url 'User:submit_review' item.product.id order.id %}" enctype="multipart/form-data" class="review-form mt-4 space-y-3 bg-peach-50 p-3 rounded-md border border-rose-200">
+                                    {% csrf_token %}
+                                    <label class="block text-xs font-medium text-peach-700 mb-1">Rate this product</label>
+                                    <div class="star-rating flex gap-1">
+                                        {% for i in "12345" %}
+                                            <div class="relative">
+                                                <input type="radio" name="rating" value="{{ forloop.counter }}" id="star{{ forloop.counter }}_{{ item.id }}"
+                                                       class="peer hidden">
+                                                <label for="star{{ forloop.counter }}_{{ item.id }}"
+                                                       class="text-lg cursor-pointer text-rose-200 peer-checked:text-[#f9a8d4] hover:text-peach-400 transition">
+                                                    ★
+                                                </label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                    <label class="block text-xs font-medium text-peach-700 mt-2">Write a review</label>
+                                    <textarea name="review"
+                                              class="w-full border-rose-300 rounded-md p-2 text-xs focus:ring-2 focus:ring-peach-500 focus:border-peach-500"
+                                              rows="3" placeholder="Share your experience..."></textarea>
+
+                                    <label class="block text-xs font-medium text-peach-700 mt-2">Upload image (optional)</label>
+                                    <input type="file" name="image" accept="image/*"
+                                           class="w-full text-xs text-peach-500 file:border-none file:rounded file:bg-peach-100 file:text-peach-700 file:py-1 file:px-2">
+
+                                    <button type="submit"
+                                            class="btn mt-2 bg-peach-600 text-white px-4 py-1 rounded-md text-xs hover:bg-peach-700 transition">
+                                        Submit Review
+                                    </button>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                            <div class="text-xs text-peach-700 mt-2">DEBUG: Item {{ item.id }} status is {{ item.status }}, review form not shown</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Order Status & Actions -->
+                    <div class="sm:w-48 text-right sm:text-left">
+                        <div class="status-container mb-3">
+                            {% if item.status == "Pending" %}
+                                <p class="status text-xs font-semibold text-peach-600 flex items-center">
+                                    <span class="inline-block w-2 h-2 bg-peach-400 rounded-full mr-1"></span>Order received
+                                </p>
+                            {% elif item.status == "Shipped" %}
+                                <div>
+                                    <p class="status text-xs font-semibold text-peach-600 flex items-center">
+                                        <span class="inline-block w-2 h-2 bg-peach-500 rounded-full mr-1"></span>Shipped
+                                    </p>
+                                    <p class="text-xs text-peach-500 mt-1">
+                                        Expected by {{ item.expected_delivery_date }}<br>
+                                        Tracking: {{ item.shipping_company }} — {{ item.tracking_number }}
+                                    </p>
+                                </div>
+                            {% elif item.status == "Out for Delivery" %}
+                                <div>
+                                    <p class="status text-xs font-semibold text-peach-700 flex items-center">
+                                        <span class="inline-block w-2 h-2 bg-peach-400 rounded-full mr-1"></span>Out for Delivery
+                                    </p>
+                                    <p class="text-xs text-peach-500 mt-1">Arriving soon</p>
+                                </div>
+                            {% elif item.status == "Delivered" %}
+                                <div>
+                                    <p class="status text-xs font-semibold text-green-600 flex items-center">
+                                        <span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-1"></span>Delivered
+                                    </p>
+                                    <p class="text-xs text-peach-500 mt-1">On {{ item.expected_delivery_date }}</p>
+                                </div>
+                            {% elif item.status == "Returned" %}
+                                <div>
+                                    <p class="status text-xs font-semibold text-red-600 flex items-center">
+                                        <span class="inline-block w-2 h-2 bg-red-500 rounded-full mr-1"></span>Returned
+                                    </p>
+                                    <p class="text-xs text-peach-500 mt-1">(Refund not available)</p>
+                                </div>
+                            {% elif item.status == "Cancelled" %}
+                                <div>
+                                    <p class="status text-xs font-semibold text-orange-600 flex items-center">
+                                        <span class="inline-block w-2 h-2 bg-orange-500 rounded-full mr-1"></span>Cancelled
+                                    </p>
+                                    <p class="text-xs text-peach-500 mt-1">This item was cancelled.</p>
+                                </div>
+                            {% else %}
+                                <p class="status text-xs font-semibold text-peach-500 flex items-center">
+                                    <span class="inline-block w-2 h-2 bg-peach-300 rounded-full mr-1"></span>{{ item.status }}
+                                </p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="mt-2 space-y-2 flex flex-col items-end sm:items-start">
+                            {% if item.status == "Shipped" or item.status == "Out for Delivery" %}
+                                <a href="{% url 'User:track_order' item.id %}" class="btn block bg-peach-100 text-peach-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-peach-200 text-center w-32">Track Order</a>
+                            {% endif %}
+                            {% if item.status == "Delivered" and not item.returned %}
+                                <a href="{% url 'User:request_return' item.id %}" class="btn block bg-peach-100 text-peach-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-peach-200 text-center w-32">
+                                    Request Return
+                                </a>
+                            {% elif item.returned %}
+                                <span class="status block text-peach-600 text-xs font-semibold w-32 text-center">Return Requested</span>
+                            {% endif %}
+                            {% if item.status == "Pending" %}
+                                <a href="{% url 'User:cancel_order_item' item.id %}" class="btn block bg-red-100 text-red-700 px-3 py-1 rounded-md text-xs font-medium hover:bg-red-200 text-center w-32">
+                                    Cancel Order
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+
+        <!-- Final Price Summary -->
+        <section class="order-summary rounded-lg p-4 mt-6 fade-in">
+            <h2 class="text-lg font-semibold text-peach-800 mb-3">Order Summary</h2>
+            <div class="text-xs text-peach-700 space-y-2 max-w-sm">
+                <p>
+                    <span>Subtotal:</span>
+                    <span>₹{{ order.total_price|floatformat:2 }}</span>
+                </p>
+                <p>
+                    <span>Shipping:</span>
+                    <span>₹{{ shipping|floatformat:2 }}</span>
+                </p>
+                <p>
+                    <span>Discount:</span>
+                    <span>-₹{{ discount|floatformat:2 }}</span>
+                </p>
+                <hr class="my-2 border-rose-200">
+                <p class="font-bold text-peach-700 text-sm">
+                    <span>Total Paid:</span>
+                    <span>₹{{ order.final_price|floatformat:2 }}</span>
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="lg:w-1/3 space-y-6">
+        <!-- General Information -->
+        <section class="sidebar rounded-lg p-4 fade-in">
+            <h2 class="text-lg font-semibold text-peach-800 mb-3">General Information</h2>
+            <div class="text-xs text-peach-700 space-y-2">
+                <p>
+                    <span><strong>Name Customer:</strong></span>
+                    <span>{{ order.buyer.username }}</span>
+                </p>
+                <p>
+                    <span><strong>Email:</strong></span>
+                    <span>{{ order.buyer.email }}</span>
+                </p>
+                <p>
+                    <span><strong>Date Order:</strong></span>
+                    <span>{{ order.created_at|date:"M d, Y" }}</span>
+                </p>
+                <p>
+                    <span><strong>Phone Number:</strong></span>
+                    <span>{{ order.buyer.phone }}</span>
+                </p>
+                <p>
+                    <span><strong>Payment Methods:</strong></span>
+                    <span>{{ payment_info.payment_method }}</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Shipping Address -->
+        <section class="sidebar rounded-lg p-4 fade-in">
+            <h2 class="text-lg font-semibold text-peach-800 mb-3">Shipping Address</h2>
+            <div class="text-xs text-peach-700 space-y-2">
+                <p>
+                    <span><strong>Street Address:</strong></span>
+                    <span>{{ order.address.address_line }}</span>
+                </p>
+                <p>
+                    <span><strong>Apartment/Suite:</strong></span>
+                    <span>{{ order.address.apartment_suite }}</span>
+                </p>
+                <p>
+                    <span><strong>City:</strong></span>
+                    <span>{{ order.address.city }}</span>
+                </p>
+                <p>
+                    <span><strong>State:</strong></span>
+                    <span>{{ order.address.state }}</span>
+                </p>
+                <p>
+                    <span><strong>Postal Code:</strong></span>
+                    <span>{{ order.address.pincode }}</span>
+                </p>
+                <p>
+                    <span><strong>Country:</strong></span>
+                    <span>{{ order.address.country }}</span>
+                </p>
+                <p>
+                    <span><strong>Phone Number:</strong></span>
+                    <span>{{ order.address.phone }}</span>
+                </p>
+            </div>
+        </section>
+    </aside>
+</div>
+
+<!-- Back to Home Link (End of Page) -->
+<div class="flex justify-center py-8">
+    <a href="{% url 'User:user_home' %}" class="back-home-btn">Back to Home</a>
+</div>
+
+<script>
+    // Star Rating Interaction
+    document.querySelectorAll('.star-rating input[type="radio"]').forEach(star => {
+        star.addEventListener('change', function () {
+            const rating = parseInt(this.value);
+            const stars = this.closest('.star-rating').querySelectorAll('label');
+            stars.forEach((starLabel, index) => {
+                if (index < rating) {
+                    starLabel.classList.add('text-[#f9a8d4]');
+                } else {
+                    starLabel.classList.remove('text-[#f9a8d4]');
+                }
+            });
+        });
+    });
+
+    // Debug Form Submission
+    document.querySelectorAll('.review-form').forEach(form => {
+        form.addEventListener('submit', function (event) {
+            console.log('Review form submitted:', new FormData(this));
+        });
+    });
+</script>
+
+</body>
+</html>

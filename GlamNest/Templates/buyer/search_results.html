@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Listing</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Inter and Playfair Display -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* Root variables for consistent theming */
+    :root {
+      --brown-600: #8B4513; /* Primary brown color */
+      --brown-700: #6B3A0F; /* Darker brown for hover */
+      --gray-800: #1F2937; /* Dark gray for text */
+      --gray-600: #4B5563; /* Medium gray for secondary text */
+      --gray-200: #E5E7EB; /* Light gray for backgrounds */
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Ensure the body has a clean background and font */
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #fbf9f9;
+      color: var(--gray-800);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Simple navbar styling */
+    .small-navbar {
+      background-color: #f8f9fa;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 12px 0;
+    }
+
+    .small-navbar .container {
+      display: flex;
+      align-items: center;
+    }
+
+    .small-navbar a {
+      font-family: 'Playfair Display', serif;
+      color: var(--brown-600);
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .small-navbar a:hover {
+      color: var(--brown-700);
+    }
+
+    /* Adjust container padding for fixed navbar */
+    .container.product-container {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 80px; /* Space for fixed navbar */
+    }
+
+    /* Enhance heading styles */
+    h1 {
+      font-family: 'Playfair Display', serif;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    /* Product card enhancements */
+    .bg-white {
+      border: 1px solid var(--gray-200);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .bg-white:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-xl);
+    }
+
+    /* Image styling */
+    img {
+      transition: transform 0.3s ease;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+    }
+
+    /* No image placeholder */
+    .bg-gray-200 {
+      background: linear-gradient(145deg, #e5e7eb, #d1d5db);
+    }
+
+    /* Button styling */
+    button.bg-brown-600 {
+      font-weight: 500;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      color: black;
+    }
+
+    button.bg-brown-600:hover {
+      background-color: var(--brown-700);
+      transform: scale(1.05);
+      background-color: #ef8057;
+    }
+
+    /* Link styling */
+    a.text-600 {
+      transition: color 0.3s ease;
+      color: black;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    a.text-brown-600:hover {
+      background-color: var(--brown-700);
+      transform: scale(1.05);
+      background-color: #ef8057;
+    }
+
+    /* Pagination styling */
+    nav ul li a,
+    nav ul li span {
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      background-color: var(--gray-300);
+      color: var(--brown-600);
+    }
+
+    nav ul li span.bg-brown-600 {
+      background-color: var(--brown-600) !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      h1 {
+        font-size: 1.875rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bg-white {
+        margin-bottom: 1.5rem;
+      }
+
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      nav ul li {
+        margin-bottom: 0.5rem;
+      }
+
+      .small-navbar a {
+        font-size: 1rem;
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Accessibility improvements */
+    a:focus,
+    button:focus {
+      outline: 2px solid var(--brown-600);
+      outline-offset: 2px;
+    }
+
+    /* Animation for no products found */
+    .text-center.mt-20 {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Small Navbar -->
+  <nav class="small-navbar">
+    <div class="container">
+      <a href="/user_home">Back to Home</a>
+    </div>
+  </nav>
+
+  <div class="container product-container mx-auto px-4 py-10">
+    <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-8">
+      {% if query %}
+        Search Results for "<span class="text-brown-600">{{ query }}</span>"
+      {% else %}
+        All Products
+      {% endif %}
+    </h1>
+
+    {% if products %}
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {% for product in products %}
+          <div class="bg-white shadow-lg rounded-2xl overflow-hidden transition hover:shadow-xl">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.product_name }}"
+                   class="w-full h-52 object-cover">
+            {% else %}
+              <div class="w-full h-52 bg-gray-200 flex items-center justify-center text-gray-500 text-sm">
+                No Image Available
+              </div>
+            {% endif %}
+            <div class="p-5">
+              <h2 class="text-lg font-semibold text-gray-800 truncate">{{ product.product_name }}</h2>
+              <p class="text-sm text-gray-600">{{ product.brand_name }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ product.category }} — {{ product.product_type }}</p>
+              <p class="text-xl font-bold text-brown-700 mt-3">₹{{ product.price }}</p>
+              <div class="mt-4 flex items-center justify-between">
+                <a href="{% url 'User:product_detail' product.id %}" class="bg-brown-600 text-dark text-sm px-4 py-2 rounded hover:bg-brown-700 transition">
+                  Show Details
+                </a>
+                
+               
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if page_obj.has_other_pages %}
+        <nav class="mt-10 flex justify-center" aria-label="Pagination">
+          <ul class="inline-flex items-center space-x-2">
+            {% if page_obj.has_previous %}
+              <li>
+                <a href="?q={{ query|urlencode }}&page={{ page_obj.previous_page_number }}"
+                   class="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                   aria-label="Previous Page">Previous</a>
+              </li>
+            {% else %}
+              <li>
+                <span class="px-4 py-2 rounded bg-gray-100 text-gray-400 cursor-not-allowed">Previous</span>
+              </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+                <li>
+                  <span class="px-4 py-2 rounded bg-brown-600 text-white font-semibold">{{ num }}</span>
+                </li>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li>
+                  <a href="?q={{ query|urlencode }}&page={{ num }}"
+                     class="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition">
+                    {{ num }}
+                  </a>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+              <li>
+                <a href="?q={{ query|urlencode }}&page={{ page_obj.next_page_number }}"
+                   class="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                   aria-label="Next Page">Next</a>
+              </li>
+            {% else %}
+              <li>
+                <span class="px-4 py-2 rounded bg-gray-100 text-gray-400 cursor-not-allowed">Next</span>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      {% endif %}
+    {% else %}
+      <div class="text-center mt-20">
+        <p class="text-xl text-gray-600">No products found for 
+          <span class="text-brown-600 font-semibold">"{{ query }}"</span>.
+        </p>
+        <p class="text-gray-500 mt-2">Try a different search term or explore categories.</p>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>

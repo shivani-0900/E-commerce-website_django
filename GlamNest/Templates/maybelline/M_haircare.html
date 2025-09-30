@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maybelline Haircare</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      position: relative;
+      min-height: 60vh;
+      background: url("{% static 'images/maybelline_haircareh.jpg' %}") center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .hero-text {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .hero-text h1 {
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 8px black;
+    }
+
+    .animate {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-in-out;
+    }
+
+    .animate.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .product-card {
+      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .product-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .filter-label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  {% include 'brands/maybelline_navebar.html' %}
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-text animate">
+      <h1><i class="bi bi-droplet-half"></i> Nourish with Maybelline Haircare</h1>
+      <p>Healthy, shiny, and strong hair starts here. Discover the power of salon-level treatment at home.</p>
+    </div>
+  </section>
+
+  <!-- Filter Section -->
+  <section class="container my-5 animate">
+    <form method="get" class="row g-3 justify-content-center">
+      <div class="col-md-3">
+        <label class="filter-label">Hair Texture</label>
+        <select name="hair_texture" class="form-select">
+          <option value="">All Textures</option>
+          <option value="Straight" {% if selected_texture == "Straight" %}selected{% endif %}>Straight</option>
+          <option value="Wavy" {% if selected_texture == "Wavy" %}selected{% endif %}>Wavy</option>
+          <option value="Curly" {% if selected_texture == "Curly" %}selected{% endif %}>Curly</option>
+          <option value="Coily" {% if selected_texture == "Coily" %}selected{% endif %}>Coily</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="filter-label">Category</label>
+        <select name="category" class="form-select">
+          <option value="">All Categories</option>
+          <option value="Shampoo" {% if selected_category == "Shampoo" %}selected{% endif %}>Shampoo</option>
+          <option value="Conditioner" {% if selected_category == "Conditioner" %}selected{% endif %}>Conditioner</option>
+          <option value="Hair Oil" {% if selected_category == "Hair Oil" %}selected{% endif %}>Hair Oil</option>
+          <option value="Hair Mask" {% if selected_category == "Hair Mask" %}selected{% endif %}>Hair Mask</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="filter-label">Price</label>
+        <select name="price" class="form-select">
+          <option value="">Any</option>
+          <option value="low" {% if selected_price == "low" %}selected{% endif %}>Under ₹500</option>
+          <option value="mid" {% if selected_price == "mid" %}selected{% endif %}>₹500 - ₹1000</option>
+          <option value="high" {% if selected_price == "high" %}selected{% endif %}>Above ₹1000</option>
+        </select>
+      </div>
+      <div class="col-md-2 d-grid">
+        <label class="invisible d-block mb-2">Apply</label>
+        <button type="submit" class="btn btn-dark">Apply Filters</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Haircare Products -->
+  <section class="container animate mb-5">
+    <h2 class="text-center mb-4">Haircare Products</h2>
+    <div class="row">
+      {% for product in products %}
+      <div class="col-md-4 mb-4">
+        <div class="card product-card h-100">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.product_name }}">
+          {% else %}
+            <img src="{% static 'images/default_product.jpg' %}" class="card-img-top" alt="Default">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ product.product_name }}</h5>
+            <p class="text-primary fw-bold">₹{{ product.price }}</p>
+            <a href="{% url 'User:product_detail' product.id %}" class="btn btn-outline-dark">View Details</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-center">No Maybelline haircare products available at the moment.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Why Choose Maybelline Haircare -->
+  <section class="container mb-5 animate">
+    <h3 class="text-center mb-4">Why Choose Maybelline Haircare?</h3>
+    <div class="row text-center">
+      <div class="col-md-4">
+        <i class="bi bi-heart-pulse fs-2 text-danger"></i>
+        <h6>Gentle on Scalp</h6>
+        <p>Formulated to cleanse without stripping natural oils.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-stars fs-2 text-warning"></i>
+        <h6>Salon-Like Finish</h6>
+        <p>Experience silky, manageable hair from the first use.</p>
+      </div>
+      <div class="col-md-4">
+        <i class="bi bi-droplet fs-2 text-primary"></i>
+        <h6>Deep Hydration</h6>
+        <p>Infused with nourishing oils and keratin for lasting shine.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Animation Script -->
+  <script>
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,663 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Product</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-bg: #f5f7fa;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-light: #dbeafe;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg);
+            box-shadow: var(--shadow);
+            padding: 30px 20px;
+            height: 100vh;
+            position: fixed;
+            animation: slideIn 0.5s ease forwards;
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #d1d5db #ffffff;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #ffffff;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #b0b3b8;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-details h6 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .user-details p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .date-time {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 10px 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .date-time i {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-right: 10px;
+        }
+
+        .date-time p {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a i {
+            font-size: 1.3rem;
+            margin-right: 12px;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+            background: #f1f5f9;
+            color: var(--accent-color);
+        }
+
+        .sidebar-nav a:hover i {
+            color: var(--accent-color);
+        }
+
+        .sidebar-nav .active {
+            background: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .sidebar-nav .active i {
+            color: #ffffff;
+        }
+
+        .nested-menu {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 15px 30px;
+        }
+
+        .nested-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nested-menu a {
+            font-size: 0.9rem;
+            padding: 8px 15px;
+            color: var(--text-secondary);
+        }
+
+        .nested-menu a:hover {
+            color: var(--accent-color);
+            background: #f1f5f9;
+        }
+
+        .nested-menu .active {
+            background: #f1f5f9;
+            color: var(--accent-color);
+        }
+
+        .sidebar-nav .sign-out {
+            position: sticky;
+            bottom: 0;
+            width: calc(100% - 40px);
+            background: var(--sidebar-bg);
+            padding-top: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Content Area */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+        }
+
+        /* Form Styles */
+        .form-container {
+            background: var(--card-bg);
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent-color);
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .form-header {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group.double-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            opacity: 0;
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        .form-group label:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group label:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 8px;
+            font-size: 0.95rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: var(--text-primary);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group textarea {
+            resize: none;
+            height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+            outline: none;
+        }
+
+        .form-group input[type="file"] {
+            padding: 5px;
+        }
+
+        .form-group img {
+            max-width: 100px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .form-group button {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .form-group button:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            width: 300px;
+        }
+
+        .alert {
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 991px) {
+            .sidebar {
+                width: 200px;
+            }
+            .content {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+            }
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px;
+            }
+            .content {
+                margin-left: 0;
+                width: 100%;
+                padding: 15px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .form-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="{% static 'images/glam_logo.png' %}" alt="Logo" class="sidebar-logo">
+        </div>
+
+        <div class="user-info">
+            <div class="user-details">
+                <h6>{{ user.username|title }}</h6>
+                <p>Brand: {{ user.brand|title }}</p>
+            </div>
+        </div>
+
+        <div class="date-time">
+            <i class="bi bi-clock"></i>
+            <p>{{ user.date_joined|date:"M d, Y" }}</p>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li>
+                <a href="/seller_home" class="{% if request.path == '/seller_home' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="/seller_product_list" class="{% if request.path == '/seller_product_list' or request.path|slice:':7' == '/edit_p' %}active{% endif %}">
+                    <i class="bi bi-box-seam-fill"></i> My Products
+                </a>
+            </li>
+            <li>
+                <a href="/add_product" class="{% if request.path == '/add_product' %}active{% endif %}">
+                    <i class="bi bi-plus-circle"></i> Add Product
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'manage_coupons' %}" class="{% if request.resolver_match.url_name == 'manage_coupons' %}active{% endif %}">
+                    <i class="bi bi-ticket-perforated"></i> Manage Coupons
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'order:seller_orders_view' %}" class="{% if request.resolver_match.url_name == 'order:seller_orders_view' and not request.GET.status %}active{% endif %}">
+                    <i class="bi bi-cart"></i> Orders
+                </a>
+                <ul class="nested-menu">
+                    <li>
+                        <a href="{% url 'order:seller_orders_view' %}?status=complete" class="{% if request.GET.status == 'complete' %}active{% endif %}">
+                            Complete
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'order:seller_orders_view' %}?status=cancelled" class="{% if request.GET.status == 'cancelled' %}active{% endif %}">
+                            Cancelled
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'order:seller_orders_view' %}?status=pending" class="{% if request.GET.status == 'pending' %}active{% endif %}">
+                            Pending
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'order:seller_orders_view' %}?status=returned" class="{% if request.GET.status == 'returned' %}active{% endif %}">
+                            Returned
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="/seller_profile" class="{% if request.path == '/seller_profile' %}active{% endif %}">
+                    <i class="bi bi-person"></i> Profile
+                </a>
+            </li>
+            <li class="sign-out">
+                <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %}">
+                    <i class="bi bi-box-arrow-right"></i> Sign out
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{% if message.level == 'success' %}success{% else %}danger{% endif %} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="container my-5">
+            <div class="form-container">
+                <h1>Edit Product</h1>
+                <p class="form-header">Update your product information below.</p>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="product_name">Product Name</label>
+                            <input type="text" class="form-control" id="product_name" name="product_name" value="{{ product.product_name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="brand_name">Brand Name</label>
+                            <input type="text" class="form-control" id="brand_name" name="brand_name" value="{{ product.seller.brand }}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price</label>
+                            <input type="number" class="form-control" id="price" step="0.01" min="0" name="price" value="{{ product.price }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <select class="form-select" id="quantity" name="quantity" required>
+                                {% for value, label in quantity_choices %}
+                                    <option value="{{ value }}" {% if product.quantity == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description" required>{{ product.description }}</textarea>
+                        </div>
+                        <div class="form-group double-width">
+                            <label for="ingredients">Ingredients</label>
+                            <textarea class="form-control" id="ingredients" name="ingredients">{{ product.ingredients }}</textarea>
+                        </div>
+                        <div class="form-group double-width">
+                            <label for="how_to_use">How to Use</label>
+                            <textarea class="form-control" id="how_to_use" name="how_to_use">{{ product.how_to_use }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="expiry_date">Expiry Date</label>
+                            <input type="date" class="form-control" id="expiry_date" name="expiry_date" value="{{ product.expiry_date|date:'Y-m-d'|default:'' }}" min="{{ today|date:'Y-m-d' }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="country_of_origin">Country of Origin</label>
+                            <input type="text" class="form-control" id="country_of_origin" name="country_of_origin" value="{{ product.country_of_origin|default:'' }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="manufacturer">Manufacturer</label>
+                            <input type="text" class="form-control" id="manufacturer" name="manufacturer" value="{{ product.manufacturer|default:'' }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="image">Product Image</label>
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="Current Image" class="mb-2">
+                            {% endif %}
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        </div>
+                        <div class="form-group">
+                            <label for="product_type">Product Type</label>
+                            <select class="form-select" id="product_type" name="product_type" required>
+                                <option value="Skincare" {% if product.product_type == "Skincare" %}selected{% endif %}>Skincare</option>
+                                <option value="Makeup" {% if product.product_type == "Makeup" %}selected{% endif %}>Makeup</option>
+                                <option value="Haircare" {% if product.product_type == "Haircare" %}selected{% endif %}>Haircare</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select class="form-select" id="category" name="category" required>
+                                {% for cat_val in categories %}
+                                    <option value="{{ cat_val }}" {% if cat_val == product.category %}selected{% endif %}>{{ cat_val }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" id="skin_type_container">
+                            <label for="skin_type">Skin Type</label>
+                            <select class="form-select" id="skin_type" name="skin_type">
+                                {% for val in skin_types %}
+                                    <option value="{{ val }}" {% if product.skin_type == val %}selected{% endif %}>{{ val }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" id="skin_tone_container">
+                            <label for="skin_tone">Skin Tone</label>
+                            <select class="form-select" id="skin_tone" name="skin_tone">
+                                {% for val in skin_tones %}
+                                    <option value="{{ val }}" {% if product.skin_tone == val %}selected{% endif %}>{{ val }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" id="hair_texture_container">
+                            <label for="hair_texture">Hair Texture</label>
+                            <select class="form-select" id="hair_texture" name="hair_texture">
+                                {% for val in hair_textures %}
+                                    <option value="{{ val }}" {% if product.hair_texture == val %}selected{% endif %}>{{ val }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group full-width text-center">
+                            <button type="submit" class="btn"><i class="bi bi-save me-1"></i> Save Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const productTypeSelect = document.getElementById('product_type');
+        const skinTypeContainer = document.getElementById('skin_type_container');
+        const skinTypeSelect = document.getElementById('skin_type');
+        const skinToneContainer = document.getElementById('skin_tone_container');
+        const skinToneSelect = document.getElementById('skin_tone');
+        const hairTextureContainer = document.getElementById('hair_texture_container');
+        const hairTextureSelect = document.getElementById('hair_texture');
+
+        function toggleFields() {
+            const type = productTypeSelect.value;
+
+            skinTypeContainer.style.display = 'none';
+            skinToneContainer.style.display = 'none';
+            hairTextureContainer.style.display = 'none';
+
+            skinTypeSelect.required = false;
+            skinToneSelect.required = false;
+            hairTextureSelect.required = false;
+
+            if (type === 'Skincare') {
+                skinTypeContainer.style.display = 'block';
+                skinTypeSelect.required = true;
+            } else if (type === 'Makeup') {
+                skinToneContainer.style.display = 'block';
+                skinToneSelect.required = true;
+            } else if (type === 'Haircare') {
+                hairTextureContainer.style.display = 'block';
+                hairTextureSelect.required = true;
+            }
+        }
+
+        productTypeSelect.addEventListener('change', toggleFields);
+        window.addEventListener('DOMContentLoaded', toggleFields);
+
+        // Date validation for expiry_date
+        const expiryDateInput = document.getElementById('expiry_date');
+        const today = new Date().toISOString().split('T')[0];
+        expiryDateInput.setAttribute('min', today);
+
+        expiryDateInput.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const currentDate = new Date();
+            if (selectedDate < currentDate) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Invalid Date',
+                    text: 'Expiry date should be in the future.',
+                    confirmButtonColor: '#3b82f6'
+                });
+                this.value = '';
+            }
+        });
+    </script>
+</body>
+</html>

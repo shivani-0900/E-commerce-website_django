@@ -1,0 +1,309 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - GlamNest</title>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f0f4f8, #ffffff);
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      background: #ffffff;
+      border-radius: 20px;
+      overflow: hidden;
+      width: 80%;
+      max-width: 1100px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease;
+    }
+
+    .left {
+      flex: 1;
+      background: url("{% static 'images/user_img.jpg' %}") center/cover no-repeat;
+      min-height: 550px;
+      position: relative;
+    }
+
+    .left::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(20, 184, 166, 0.2), rgba(255, 107, 107, 0.2));
+      opacity: 0.5;
+    }
+
+    .right {
+      flex: 1;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #f9f9f9;
+      border-radius: 20px;
+      margin: 20px;
+      position: relative;
+      animation: slideInRight 1s ease;
+    }
+
+    .nav-menu {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(45deg, #b24f6099, #9a3a52);
+      border-radius: 50%;
+      color: #fff;
+      text-decoration: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .nav-menu:hover {
+      background: linear-gradient(45deg, #9a3a52, #b24f6099);
+      transform: scale(1.1);
+      box-shadow: 0 3px 10px rgba(20, 184, 166, 0.4);
+    }
+
+    .nav-menu i {
+      font-size: 22px;
+    }
+
+    .form-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 32px;
+      color: #b8596c;
+      margin-bottom: 30px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 25px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 15px 12px;
+      font-size: 16px;
+      border: 1px solid #ffffff;
+      border-radius: 8px;
+      background: #fff;
+      color: #333;
+      outline: none;
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+
+    input:hover, select:hover {
+      border-color: #f5436f;
+    }
+
+    input:focus, select:focus {
+      box-shadow: 0 0 8px rgba(183, 57, 90, 0.4);
+      border-color: #b12753;
+    }
+
+    label {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      color: #777;
+      font-size: 16px;
+      pointer-events: none;
+      transform: translateY(-50%);
+      transition: 0.3s ease all;
+      
+      padding: 0 4px;
+    }
+
+    input:focus + label,
+    input:not(:placeholder-shown) + label,
+    select:valid + label {
+      top: 0;
+      font-size: 12px;
+      color: #f5436f;
+      transform: translateY(-50%);
+    }
+
+    .form-group i.toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      color: #f5436f;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn-submit {
+      background: linear-gradient(45deg, #b24f6099, #9a3a52);
+      color: white;
+      padding: 15px;
+      width: 100%;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(202, 49, 70, 0.4);
+    }
+
+    .btn-submit::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: 0.5s;
+    }
+
+    .btn-submit:hover::after {
+      left: 100%;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 25px;
+      display: block;
+      font-size: 15px;
+      color: #f5436f;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .login-link:hover {
+      color: #572d2d;
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(50px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        width: 90%;
+      }
+      .left {
+        min-height: 250px;
+      }
+      .right {
+        margin: 10px;
+        padding: 30px 20px;
+      }
+      .form-title {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="left"></div>
+    <div class="right">
+      <a href="/" class="nav-menu"><i class="bi bi-arrow-left"></i></a>
+      <form method="post">
+        {% csrf_token %}
+        <h2 class="form-title">Create Account</h2>
+
+        <div class="form-group">
+          <input type="text" id="username" name="username" required placeholder=" " />
+          <label for="username">Username</label>
+        </div>
+
+        <div class="form-group">
+          <input type="email" id="email" name="email" required placeholder=" " />
+          <label for="email">Email Address</label>
+        </div>
+
+        <div class="form-group">
+          <input type="tel" id="phone" name="phone" required placeholder=" " />
+          <label for="phone">Phone Number</label>
+        </div>
+
+        <div class="form-group">
+          <select id="gender" name="gender" required>
+            <option value="" disabled selected hidden></option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="other">Other</option>
+          </select>
+          <label for="gender">Gender</label>
+        </div>
+
+        <div class="form-group">
+          <input type="password" id="password1" name="password1" required placeholder=" " />
+          <label for="password1">Password</label>
+          <i class="bi bi-eye-slash-fill toggle-password" onclick="toggleVisibility('password1', this)"></i>
+        </div>
+
+        <div class="form-group">
+          <input type="password" id="password2" name="password2" required placeholder=" " />
+          <label for="password2">Confirm Password</label>
+          <i class="bi bi-eye-slash-fill toggle-password" onclick="toggleVisibility('password2', this)"></i>
+        </div>
+  <input type="hidden" name="next" value="{{ next }}">
+
+        <button type="submit" class="btn-submit">Proceed</button>
+        <a href="/uselogin" class="login-link">Already have an account? Login</a>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleVisibility(id, icon) {
+      const input = document.getElementById(id);
+      const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+      input.setAttribute('type', type);
+      icon.classList.toggle('bi-eye');
+      icon.classList.toggle('bi-eye-slash-fill');
+    }
+  </script>
+ 
+  
+</body>
+</html>

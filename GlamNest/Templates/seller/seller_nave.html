@@ -1,0 +1,354 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Seller Dashboard</title> 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-bg: #f5f7fa;
+            --sidebar-bg: #ffffff;
+            --card-bg: #ffffff;
+            --accent-color: #3b82f6;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: var(--sidebar-bg);
+            box-shadow: var(--shadow);
+            padding: 30px 20px;
+            height: 100vh;
+            position: fixed;
+            animation: slideIn 0.5s ease forwards;
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #d1d5db #ffffff;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #ffffff;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #b0b3b8;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-logo {
+            width: 100px;
+            height: 30px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 10px;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .user-details h6 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .user-details p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .date-time {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 10px 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .date-time i {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-right: 10px;
+        }
+
+        .date-time p {
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a i {
+            font-size: 1.3rem;
+            margin-right: 12px;
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+            background: #f1f5f9;
+            color: var(--accent-color);
+        }
+
+        .sidebar-nav a:hover i {
+            color: var(--accent-color);
+        }
+
+        /* Active Link Styles */
+        .sidebar-nav .active {
+            background: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .sidebar-nav .active i {
+            color: #ffffff;
+        }
+
+        /* Nested Menu Styles */
+        .nested-menu {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 15px 30px; /* Indent nested items */
+        }
+
+        .nested-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nested-menu a {
+            font-size: 0.9rem;
+            padding: 8px 15px;
+            color: var(--text-secondary);
+        }
+
+        .nested-menu a:hover {
+            color: var(--accent-color);
+            background: #f1f5f9;
+        }
+
+        .nested-menu .active {
+            background: #f1f5f9;
+            color: var(--accent-color);
+        }
+
+        .sidebar-nav .sign-out {
+            position: sticky;
+            bottom: 0;
+            width: calc(100% - 40px);
+            background: var(--sidebar-bg);
+            padding-top: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Messages Styles */
+        .messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+            width: 300px;
+        }
+
+        .alert {
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            .sidebar-nav a {
+                font-size: 0.9rem;
+            }
+            .sidebar-nav a i {
+                font-size: 1.2rem;
+            }
+            .nested-menu a {
+                font-size: 0.85rem;
+            }
+            .user-details h6 {
+                font-size: 1rem;
+            }
+            .user-details p {
+                font-size: 0.85rem;
+            }
+            .date-time p {
+                font-size: 0.8rem;
+            }
+            .messages {
+                width: 90%;
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="{% static 'images/glam_logo.png' %}" alt="Logo" class="sidebar-logo">
+        </div>
+
+        <div class="user-info">
+            <div class="user-details">
+                <h6>{{ user.username|title }}</h6>
+                <p>Brand: {{ user.brand|title }}</p>
+            </div>
+        </div>
+
+        <div class="date-time">
+            <i class="bi bi-clock"></i>
+            <p>{{ user.date_joined }}</p>
+        </div>
+
+        <ul class="sidebar-nav">
+            <li>
+                <a href="/seller_home" class="{% if request.path == '/seller_home' %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="/seller_product_list" class="{% if request.path == '/seller_product_list' %}active{% endif %}">
+                    <i class="bi bi-box-seam-fill"></i> My Products
+                </a>
+            </li>
+            <li>
+                <a href="/add_product" class="{% if request.path == '/add_product' %}active{% endif %}">
+                    <i class="bi bi-plus-circle"></i> Add Product
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'manage_coupons' %}" class="{% if request.resolver_match.url_name == 'manage_coupons' %}active{% endif %}">
+                    <i class="bi bi-ticket-perforated"></i> Manage Coupons
+                </a>
+            </li>
+            <li>
+    <a href="{% url 'order:seller_orders_view' %}" 
+       class="{% if request.resolver_match.url_name == 'seller_orders_view' and not request.GET.status %}active{% endif %}">
+        <i class="bi bi-cart"></i> Orders
+    </a>
+    <ul class="nested-menu">
+        <li>
+            <a href="{% url 'order:seller_completed_orders' %}?status=complete" 
+               class="{% if request.GET.status == 'complete' %}active{% endif %}">
+                Complete
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'order:seller_cancelled_orders' %}?status=cancelled" 
+               class="{% if request.GET.status == 'cancelled' %}active{% endif %}">
+                Cancelled
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'order:seller_pending_orders' %}?status=pending" 
+               class="{% if request.GET.status == 'pending' %}active{% endif %}">
+                Pending
+            </a>
+        </li>
+        <li>
+           <a href="{% url 'order:seller_returned_orders' %}?status=returned" 
+   class="{% if request.GET.status == 'returned' %}active{% endif %}">
+    Returned orders
+</a>
+        </li>
+    </ul>
+</li>
+
+                <a href="/seller_profile" class="{% if request.path == '/seller_profile' %}active{% endif %}">
+                    <i class="bi bi-person"></i> Profile
+                </a>
+            </li>
+            <li class="sign-out">
+                <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %}">
+                    <i class="bi bi-box-arrow-right"></i> Sign out
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>
+</html>

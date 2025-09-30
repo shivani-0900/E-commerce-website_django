@@ -1,0 +1,496 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Makeup | GlamNest</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" crossorigin="anonymous">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- AOS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+  <!-- Google Fonts: Playfair Display, Cormorant Garamond, Open Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@400;500;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* General Reset and Base Styles */
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Cormorant Garamond', serif;
+  background: #fef9f8;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Hero Section */
+.hero-section {
+  margin-bottom: 3rem;
+  text-align: center;
+  background: linear-gradient(to bottom, #fff, #fef9f8);
+  padding: 2rem 1rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(168, 111, 106, 0.1);
+  animation: fadeUp 0.8s ease-in-out;
+}
+.hero-section img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(168, 111, 106, 0.15);
+  transition: transform 0.4s ease;
+}
+.hero-section img:hover {
+  transform: scale(1.03);
+}
+.hero-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #a86f6a;
+  margin-top: 1.5rem;
+  letter-spacing: 1px;
+}
+.hero-section p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+/* Page Heading */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  text-align: center;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+/* Filter Panel */
+.filter-panel {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(168, 111, 106, 0.1);
+  transition: transform 0.3s ease;
+}
+.filter-panel:hover {
+  transform: translateY(-3px);
+}
+.filter-panel h6 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #a86f6a;
+  margin-bottom: 1rem;
+}
+.form-check-label, .form-range {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  color: #555;
+}
+.form-check-input:checked {
+  background-color: #a86f6a;
+  border-color: #a86f6a;
+}
+.form-range::-webkit-slider-thumb,
+.form-range::-moz-range-thumb {
+  background: #a86f6a;
+}
+.btn-outline-secondary {
+  font-family: 'Open Sans', sans-serif;
+  border-color: #d9a7a1;
+  color: #a86f6a;
+}
+.btn-outline-secondary:hover {
+  background: #d9a7a1;
+  color: #fff;
+}
+.btn-warning {
+  font-family: 'Open Sans', sans-serif;
+  background: linear-gradient(45deg, #d9a7a1, #a86f6a);
+  border: none;
+  color: #fff;
+}
+.btn-warning:hover {
+  background: linear-gradient(45deg, #a86f6a, #d9a7a1);
+  box-shadow: 0 4px 10px rgba(168, 111, 106, 0.3);
+}
+
+/* Product Card */
+.product-card {
+  border: none;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(168, 111, 106, 0.08);
+}
+.product-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 8px 25px rgba(168, 111, 106, 0.15);
+}
+.card-img-top {
+  height: 230px;
+  object-fit: cover;
+  border-bottom: 1px solid #f0e0de;
+  transition: transform 0.4s ease;
+}
+.product-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+.card-body {
+  padding: 1.3rem;
+}
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin-bottom: 0.7rem;
+}
+.card-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 0.3rem;
+}
+.card-text.text-danger {
+  font-weight: 600;
+  color: #a86f6a !important;
+}
+.btn-outline-dark {
+  font-family: 'Open Sans', sans-serif;
+  border-color: #a86f6a;
+  color: #a86f6a;
+  font-size: 0.9rem;
+  border-radius: 30px;
+  padding: 0.4rem 1.2rem;
+  transition: all 0.3s ease;
+}
+.btn-outline-dark:hover {
+  background: #a86f6a;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(168, 111, 106, 0.2);
+}
+.badge {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.7rem;
+  padding: 0.5em 0.8em;
+  border-radius: 12px;
+}
+.badge.bg-danger {
+  background-color: #d32f2f;
+}
+.badge.bg-primary {
+  background-color: #0288d1;
+}
+
+/* Fade Animation */
+.fade-container {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-container.show {
+  opacity: 1;
+  transform: none;
+}
+
+/* Pagination */
+.pagination .page-link {
+  font-family: 'Open Sans', sans-serif;
+  color: #a86f6a;
+  border: none;
+  margin: 0 5px;
+  border-radius: 5px;
+}
+.pagination .page-link:hover {
+  background: #d9a7a1;
+  color: #fff;
+}
+.pagination .page-item.disabled .page-link {
+  color: #555;
+}
+
+/* Toast Styling */
+.custom-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2d2d2d;
+  color: #fff;
+  padding: 15px 25px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(168, 111, 106, 0.3);
+  z-index: 1050;
+  animation: slideDownFade 0.5s ease forwards;
+}
+.toast-icon {
+  background-color: #d9a7a1;
+  border-radius: 50%;
+  padding: 10px;
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.toast-icon i {
+  font-size: 1.5rem;
+  color: #2d2d2d;
+}
+.toast-content strong {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.toast-content p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .hero-section h2 {
+    font-size: 2rem;
+  }
+  .hero-section p {
+    font-size: 0.9rem;
+  }
+  .filter-panel {
+    padding: 1rem;
+  }
+  .filter-panel h6 {
+    font-size: 1.1rem;
+  }
+  .form-check-label {
+    font-size: 0.85rem;
+  }
+  .card-title {
+    font-size: 1.15rem;
+  }
+  .card-text, .btn-outline-dark {
+    font-size: 0.85rem;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <!-- Fixed Navbar -->
+  <div class="navbar">
+    {% include 'buyer/user_navebar.html' %}
+  </div>
+
+  <div class="container py-4">
+    <!-- Hero Section -->
+    <div class="hero-section mb-5 text-center">
+       <h2 class="mt-3">Explore Your Signature Look</h2>
+      <p class="text-muted">Premium makeup products that enhance your natural beauty.</p>
+      <img src="{% static 'images/home_orginal.jpg' %}" class="img-fluid rounded shadow" alt="Makeup Banner">
+     
+    </div>
+
+    <h1 class="mb-4 text-center">Makeup Products</h1>
+
+    <!-- Filter Panel -->
+    <form method="get">
+      <button class="btn btn-outline-secondary w-100 d-md-none mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+        Toggle Filters
+      </button>
+      <div class="collapse show" id="filterCollapse">
+        <div class="row filter-panel">
+          <!-- Category -->
+          <div class="col-md-3">
+            <h6>Category</h6>
+            {% for value, label in categories %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="category" value="{{ value }}"
+                       {% if value in selected_category %}checked{% endif %}>
+                <label class="form-check-label">{{ label }}</label>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Skin Tone -->
+          <div class="col-md-3">
+            <h6>Skin Tone</h6>
+            {% for value, label in skin_tones %}
+              {% if value != "None" %}
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="skin_tone" value="{{ value }}"
+                         {% if value in selected_skin_tone %}checked{% endif %}>
+                  <label class="form-check-label">{{ label }}</label>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- Brand -->
+          <div class="col-md-3">
+            <h6>Brand</h6>
+            {% for brand in brands %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="brand" value="{{ brand }}"
+                       {% if brand in selected_brand %}checked{% endif %}>
+                <label class="form-check-label">{{ brand }}</label>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Price -->
+          <div class="col-md-3">
+            <h6>Max Price</h6>
+            <input type="range" name="price" class="form-range" min="0" max="5000" step="100"
+                   value="{{ selected_price|default:5000 }}"
+                   oninput="document.getElementById('priceValue').innerText = this.value">
+            <p>₹ <span id="priceValue">{{ selected_price|default:5000 }}</span></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-end mb-3">
+        <button type="submit" class="btn btn-warning">Apply Filters</button>
+      </div>
+    </form>
+
+    <!-- Product Grid -->
+    <div id="productContainer" class="row fade-container show">
+      {% for product in products %}
+        <div class="col-md-4 mb-4" data-aos="zoom-in-up">
+          <div class="card product-card h-100">
+            {% if product.sold_quantity > 50 %}
+              <span class="badge bg-danger position-absolute m-2">Hot</span>
+            {% endif %}
+            {% if product.created_at|timesince < "7 days" %}
+              <span class="badge bg-primary position-absolute m-2 ms-5">New</span>
+            {% endif %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.product_name }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ product.product_name|truncatechars:30 }}</h5>
+              <p class="card-text">Brand: {{ product.brand_name }}</p>
+              <p class="card-text text-danger">Price: ₹{{ product.price }}</p>
+              <a href="{% url 'User:product_detail' product.id %}" class="btn btn-outline-dark">View</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-center text-muted">No makeup products found for selected filters.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <nav>
+      <ul class="pagination justify-content-center">
+        {% if products.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}&{{ request.GET.urlencode|safe }}">Previous</a></li>
+        {% endif %}
+        <li class="page-item disabled"><a class="page-link">{{ products.number }} of {{ products.paginator.num_pages }}</a></li>
+        {% if products.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}&{{ request.GET.urlencode|safe }}">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Filter Toast Message -->
+  <div id="filterMessage" class="custom-toast d-none">
+    <div class="toast-icon"><i class="bi bi-stars"></i></div>
+    <div class="toast-content">
+      <strong>Filters Applied</strong>
+      <p>Your makeup recommendations are now updated!</p>
+    </div>
+  </div>
+{% include 'footer_sec.html' %}
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const range = document.querySelector('input[type="range"]');
+      if (range) {
+        document.getElementById('priceValue').innerText = range.value;
+      }
+
+      const container = document.getElementById("productContainer");
+      if (container) {
+        container.classList.remove("show");
+        setTimeout(() => container.classList.add("show"), 100);
+      }
+
+      // Toast Logic
+      if (sessionStorage.getItem("filterApplied") === "true") {
+        const toastEl = document.getElementById('filterMessage');
+        toastEl.classList.remove("d-none");
+        setTimeout(() => toastEl.classList.add("d-none"), 3000);
+        sessionStorage.removeItem("filterApplied");
+      }
+
+      const filterForm = document.querySelector('form');
+      if (filterForm) {
+        filterForm.addEventListener("submit", function () {
+          sessionStorage.setItem("filterApplied", "true");
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lakme Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .fade-in { opacity: 0; transform: translateY(20px); animation: fadeIn 1s ease-out forwards; }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        .card-hover { 
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+            border-radius: 20px; 
+        }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); }
+        .card-image { 
+            border-top-left-radius: 20px; 
+            border-top-right-radius: 20px; 
+        }
+        .category-btn { transition: all 0.3s ease; }
+        .category-btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body class="bg-[#fdf6f4] font-sans text-gray-900">
+
+<!-- Logo -->
+<header class="sticky top-0 bg-white/90 backdrop-blur-md shadow-sm z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-center">
+        <img src="{% static 'images/lakmae_logo.jpg' %}" alt="Lakme Logo" class="h-12">
+    </div>
+</header>
+
+<!-- Filter Section -->
+<section class="py-12 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6 fade-in">Filter by Category</h2>
+        <div class="flex justify-center gap-4 flex-wrap">
+            {% for cat in categories %}
+            <a href="?category={{ cat.0 }}" class="px-6 py-3 rounded-md font-medium text-sm category-btn
+                {% if selected_category == cat.0 %} bg-pink-500 text-white {% else %} bg-gray-100 text-gray-700 hover:bg-pink-500 hover:text-white {% endif %}">
+                {{ cat.1 }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Subcategories -->
+        {% if subcategories_for_selected_category %}
+        <div class="flex justify-center gap-4 mt-6 flex-wrap">
+            {% for subcat in subcategories_for_selected_category %}
+            <a href="?category={{ selected_category }}&subcategory={{ subcat }}" class="px-4 py-2 rounded-md bg-gray-200 hover:bg-pink-500 hover:text-white {% if selected_subcategory == subcat %}bg-pink-500 text-white{% endif %}">
+                {{ subcat }}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Extra Filters -->
+        <form method="GET" class="mt-6 flex justify-center flex-wrap gap-4">
+            <input type="hidden" name="category" value="{{ selected_category }}">
+            {% if selected_subcategory %}
+            <input type="hidden" name="subcategory" value="{{ selected_subcategory }}">
+            {% endif %}
+
+            {% if selected_category == "Skincare" %}
+            <select name="skin_type" onchange="this.form.submit()" class="px-3 py-2 rounded-md border">
+                <option value="">All Skin Types</option>
+                {% for value, label in skin_types %}
+                    <option value="{{ value }}" {% if value == selected_skin_type %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            {% elif selected_category == "Haircare" %}
+            <select name="hair_texture" onchange="this.form.submit()" class="px-3 py-2 rounded-md border">
+                <option value="">All Hair Textures</option>
+                {% for value, label in hair_textures %}
+                    <option value="{{ value }}" {% if value == selected_hair_texture %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            {% elif selected_category == "Makeup" %}
+            <select name="skin_tone" onchange="this.form.submit()" class="px-3 py-2 rounded-md border">
+                <option value="">All Skin Tones</option>
+                {% for value, label in skin_tones %}
+                    <option value="{{ value }}" {% if value == selected_skin_tone %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            {% endif %}
+        </form>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section id="products" class="py-16 bg-[#fef9f8]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8 fade-in">
+            {{ selected_category|default:"All" }} Products
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for product in products %}
+            <div class="fade-in card-hover bg-white overflow-hidden" style="animation-delay: calc(0.1s * {{ forloop.counter0 }})">
+                <img src="{{ product.image.url|default:'https://via.placeholder.com/300x300' }}" 
+                     alt="{{ product.product_name }}" 
+                     class="w-full h-64 object-cover card-image">
+                <div class="p-5">
+                    <h3 class="text-lg font-semibold text-gray-800">{{ product.product_name }}</h3>
+                    <p class="text-gray-600 text-sm mt-2">{{ product.description|truncatewords:10 }}</p>
+                    <p class="text-pink-500 font-bold mt-3 text-lg">${{ product.price }}</p>
+                    <a role="button" href="{% url 'product_detail' product.id %}" 
+                       class="mt-4 inline-block bg-pink-500 text-white px-5 py-2 rounded-md hover:bg-pink-600 transition">
+                       Shop Now
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-center col-span-full text-gray-600 fade-in">No products available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-gray-300 py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <p class="mb-4">© 2025 Lakme. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
